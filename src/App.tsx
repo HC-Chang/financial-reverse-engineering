@@ -6,10 +6,11 @@ import AccountsView from './components/Accounts/AccountsView';
 import CSVImportView from './components/CSVImport/CSVImportView';
 import RebalanceView from './components/Rebalance/RebalanceView';
 import SubscriptionView from './components/Subscriptions/SubscriptionView';
+import TaxView from './components/Tax/TaxView';
 
 const AppContent: React.FC = () => {
   const { settings, isLoading } = useSettings();
-  const [activeTab, setActiveTab] = useState<'overview' | 'accounts' | 'csv' | 'rebalance' | 'subscriptions'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'accounts' | 'csv' | 'rebalance' | 'subscriptions' | 'tax'>('overview');
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -19,7 +20,7 @@ const AppContent: React.FC = () => {
     return <OnboardingView />;
   }
 
-  const handleNavigate = (tab: 'overview' | 'accounts' | 'csv' | 'rebalance' | 'subscriptions') => {
+  const handleNavigate = (tab: 'overview' | 'accounts' | 'csv' | 'rebalance' | 'subscriptions' | 'tax') => {
     setActiveTab(tab);
   };
 
@@ -30,6 +31,7 @@ const AppContent: React.FC = () => {
       case 'csv': return <CSVImportView />;
       case 'rebalance': return <RebalanceView />;
       case 'subscriptions': return <SubscriptionView />;
+      case 'tax': return <TaxView />;
       default: return <DashboardView onNavigate={handleNavigate} />;
     }
   };
@@ -51,6 +53,9 @@ const AppContent: React.FC = () => {
             </li>
             <li className={activeTab === 'rebalance' ? 'active' : ''}>
               <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('rebalance'); }}>Rebalance</a>
+            </li>
+            <li className={activeTab === 'tax' ? 'active' : ''}>
+              <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('tax'); }}>Tax Strategy</a>
             </li>
             <li className={activeTab === 'subscriptions' ? 'active' : ''}>
               <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('subscriptions'); }}>Subscriptions</a>

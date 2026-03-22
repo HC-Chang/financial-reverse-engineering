@@ -32,6 +32,45 @@ export const detectSubscriptions = (transactions: Transaction[]) => {
 };
 
 /**
+ * Provides a prioritized contribution strategy and retirement tax estimates.
+ * 
+ * @param settings Financial settings.
+ * @returns Object with contribution priority and estimated tax rates.
+ */
+export const calculateTaxStrategy = (settings: FinancialSettings) => {
+  const { targetMonthlyIncome } = settings;
+  const annualIncome = targetMonthlyIncome * 12;
+
+  // Simple US-based tax estimation for retirement (Standard Deduction + 10% / 12% brackets)
+  const standardDeduction = 14600; // 2024 single
+  const taxableIncome = Math.max(0, annualIncome - standardDeduction);
+  
+  let estimatedTax = 0;
+  if (taxableIncome > 0) {
+    const bracket1 = Math.min(taxableIncome, 11600);
+    estimatedTax += bracket1 * 0.10;
+    
+    if (taxableIncome > 11600) {
+      const bracket2 = Math.min(taxableIncome - 11600, 47150 - 11600);
+      estimatedTax += bracket2 * 0.12;
+    }
+  }
+
+  const effectiveRate = annualIncome > 0 ? (estimatedTax / annualIncome) * 100 : 0;
+
+  return {
+    effectiveRate,
+    estimatedAnnualTax: estimatedTax,
+    contributionWaterfall: [
+      { priority: 1, name: 'Employer Match', description: 'Immediate 100% ROI. Never leave this on the table.', icon: '🤝' },
+      { priority: 2, name: 'Roth IRA / HSA', description: 'Tax-free growth. Best for long-term compounding.', icon: '🛡️' },
+      { priority: 3, name: 'Traditional 401k/IRA', description: 'Lower current taxable income. Good if current tax > retirement tax.', icon: '📉' },
+      { priority: 4, name: 'Taxable Brokerage', description: 'Maximum flexibility. Subject to capital gains tax.', icon: '📈' }
+    ]
+  };
+};
+
+/**
  * Groups accounts by type and calculates the allocation percentages.
  * 
  * @param accounts Array of financial accounts.

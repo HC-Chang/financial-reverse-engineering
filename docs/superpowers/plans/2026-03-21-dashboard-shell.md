@@ -161,3 +161,18 @@
 - [x] **Step 4: Calculate "Annual Leak" (Monthly cost * 12) for each subscription**
 - [x] **Step 5: Update `App.tsx` with a "Subscriptions" tab**
 - [x] **Step 6: Commit Subscription Audit feature**
+
+### Task 11: Tax Strategy Engine (Optimization)
+
+**Files:**
+- Modify: `src/logic/engine.ts` (Add `calculateTaxEfficiency` logic)
+- Create: `src/components/Tax/TaxView.tsx`
+- Create: `src/components/Tax/TaxView.css`
+- Modify: `src/App.tsx` (Add Tax navigation)
+
+- [x] **Step 1: Implement basic retirement tax estimator in `src/logic/engine.ts`**
+- [x] **Step 2: Define prioritized contribution order (e.g., Roth vs Traditional vs Taxable)**
+- [x] **Step 3: Create `TaxView` with a "Contribution Waterfall" visualization**
+- [x] **Step 4: Display "Effective Rate" projections for current vs. target retirement**
+- [x] **Step 5: Update `App.tsx` with a "Tax Strategy" tab**
+- [x] **Step 6: Commit Tax Strategy feature**
