@@ -117,3 +117,15 @@
 - [x] **Step 5: Update `App.tsx` to handle the "CSV Import" tab**
 - [x] **Step 6: Verify transactions are correctly imported and associated with accounts**
 - [x] **Step 7: Commit CSV Mapper feature**
+
+### Task 8: Automated Reconciliation (Engine Update)
+
+**Files:**
+- Modify: `src/logic/engine.ts` (Add `reconcileAccount` logic)
+- Modify: `src/components/Accounts/AccountsView.tsx` (Add reconciliation UI)
+
+- [x] **Step 1: Implement `calculateBalance` in `src/logic/engine.ts` that sums transactions for a given account**
+- [x] **Step 2: Update `AccountsView` to show a "Reconcile" button if manual balance != calculated balance**
+- [x] **Step 3: Implement "Sync Balance" action that updates account manual balance to match transaction sum**
+- [x] **Step 4: Verify engine correctly sums positive/negative transactions**
+- [x] **Step 5: Commit Reconciliation logic**

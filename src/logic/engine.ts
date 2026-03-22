@@ -1,5 +1,16 @@
 import { differenceInMonths, differenceInDays, parseISO, addMonths, formatISO } from 'date-fns';
-import { FinancialSettings, EngineResults, ProjectionPoint } from '../types/financial';
+import { FinancialSettings, EngineResults, ProjectionPoint, Transaction } from '../types/financial';
+
+/**
+ * Calculates the sum of all transactions for a given account.
+ * 
+ * @param transactions Array of transactions for the account.
+ * @param initialBalance The starting balance of the account (optional).
+ * @returns The final calculated balance.
+ */
+export const calculateAccountBalance = (transactions: Transaction[], initialBalance: number = 0): number => {
+  return transactions.reduce((sum, t) => sum + t.amount, initialBalance);
+};
 
 /**
  * Calculates the required monthly investment (fuel) to reach a financial goal.
