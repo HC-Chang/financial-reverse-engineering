@@ -26,6 +26,12 @@ export interface Transaction {
   hash: string; // For duplicate detection
 }
 
+export interface AssetAllocation {
+  type: Account['type'];
+  total: number;
+  percentage: number;
+}
+
 export interface ProjectionPoint {
   date: string;
   balance: number;

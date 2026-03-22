@@ -1,0 +1,155 @@
+.rebalance-container {
+  padding: 2.5rem;
+  overflow-y: auto;
+  flex-grow: 1;
+  background-color: #f4f7f6;
+  color: #333;
+}
+
+.rebalance-header {
+  margin-bottom: 2rem;
+}
+
+.rebalance-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #2c3e50;
+}
+
+.rebalance-header p {
+  color: #7f8c8d;
+}
+
+.rebalance-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+
+.card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.warning-msg {
+  background-color: #fff3e0;
+  color: #e65100;
+  padding: 0.8rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.allocation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.allocation-row {
+  border-bottom: 1px solid #f4f7f6;
+  padding-bottom: 1.5rem;
+}
+
+.row-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.8rem;
+}
+
+.type-label {
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.amount-label {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+}
+
+.progress-container {
+  margin-bottom: 1rem;
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: #95a5a6;
+  margin-bottom: 0.3rem;
+}
+
+.multi-progress {
+  height: 12px;
+  background-color: #ecf0f1;
+  border-radius: 6px;
+  position: relative;
+}
+
+.actual-bar {
+  height: 100%;
+  background-color: #1abc9c;
+  border-radius: 6px;
+  transition: width 0.3s ease;
+}
+
+.target-marker {
+  position: absolute;
+  top: -4px;
+  height: 20px;
+  width: 4px;
+  background-color: #2c3e50;
+  border-radius: 2px;
+  transition: left 0.3s ease;
+}
+
+.drift-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.drift-tag {
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.drift-tag.over { background-color: #ffebee; color: #c62828; }
+.drift-tag.under { background-color: #e3f2fd; color: #1565c0; }
+.drift-tag.neutral { background-color: #f1f8e9; color: #33691e; }
+
+.target-input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.target-input-group input {
+  width: 60px;
+  padding: 0.3rem;
+  border: 1px solid #dcdde1;
+  border-radius: 4px;
+  text-align: right;
+}
+
+.suggestion-item {
+  padding: 0.8rem;
+  margin-bottom: 0.8rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.suggestion-item.buy { background-color: #e8f5e9; border-left: 4px solid #2e7d32; }
+.suggestion-item.sell { background-color: #fff3e0; border-left: 4px solid #ef6c00; }
+
+@media (max-width: 900px) {
+  .rebalance-grid {
+    grid-template-columns: 1fr;
+  }
+}

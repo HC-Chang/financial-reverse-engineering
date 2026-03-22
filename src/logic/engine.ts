@@ -1,5 +1,31 @@
 import { differenceInMonths, differenceInDays, parseISO, addMonths, formatISO } from 'date-fns';
-import { FinancialSettings, EngineResults, ProjectionPoint, Transaction } from '../types/financial';
+import { FinancialSettings, EngineResults, ProjectionPoint, Transaction, Account, AssetAllocation } from '../types/financial';
+
+/**
+ * Groups accounts by type and calculates the allocation percentages.
+ * 
+ * @param accounts Array of financial accounts.
+ * @returns Array of asset allocations.
+ */
+export const calculateAllocation = (accounts: Account[]): AssetAllocation[] => {
+  const totalsByType: Record<string, number> = {};
+  let grandTotal = 0;
+
+  accounts.forEach(acc => {
+    totalsByType[acc.type] = (totalsByType[acc.type] || 0) + acc.balance;
+    grandTotal += acc.balance;
+  });
+
+  if (grandTotal === 0) return [];
+
+  const types: Account['type'][] = ['Cash', 'Taxable', 'Roth', 'Traditional'];
+  
+  return types.map(type => ({
+    type,
+    total: totalsByType[type] || 0,
+    percentage: ((totalsByType[type] || 0) / grandTotal) * 100
+  }));
+};
 
 /**
  * Calculates the sum of all transactions for a given account.

@@ -129,3 +129,20 @@
 - [x] **Step 3: Implement "Sync Balance" action that updates account manual balance to match transaction sum**
 - [x] **Step 4: Verify engine correctly sums positive/negative transactions**
 - [x] **Step 5: Commit Reconciliation logic**
+
+### Task 9: Asset Rebalancing Visualization
+
+**Files:**
+- Modify: `src/types/financial.ts` (Add `AssetAllocation` types)
+- Modify: `src/logic/engine.ts` (Add `calculateAllocation` logic)
+- Create: `src/components/Rebalance/RebalanceView.tsx`
+- Create: `src/components/Rebalance/RebalanceView.css`
+- Modify: `src/App.tsx` (Add Rebalance navigation)
+
+- [x] **Step 1: Define `AssetAllocation` interface (Account totals grouped by type)**
+- [x] **Step 2: Implement `calculateAllocation` in `src/logic/engine.ts`**
+- [x] **Step 3: Create `RebalanceView` with a donut-style visualization (using CSS gradients or simple bars)**
+- [x] **Step 4: Implement "Target Allocation" settings (manual input for now)**
+- [x] **Step 5: Display "Drift" (Actual vs. Target) and suggest buy/sell actions**
+- [x] **Step 6: Update `App.tsx` with a "Rebalance" tab**
+- [x] **Step 7: Commit Rebalancing feature**
