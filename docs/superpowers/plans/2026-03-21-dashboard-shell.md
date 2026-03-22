@@ -146,3 +146,18 @@
 - [x] **Step 5: Display "Drift" (Actual vs. Target) and suggest buy/sell actions**
 - [x] **Step 6: Update `App.tsx` with a "Rebalance" tab**
 - [x] **Step 7: Commit Rebalancing feature**
+
+### Task 10: Subscription Audit Tool
+
+**Files:**
+- Modify: `src/logic/engine.ts` (Add `detectSubscriptions` logic)
+- Create: `src/components/Subscriptions/SubscriptionView.tsx`
+- Create: `src/components/Subscriptions/SubscriptionView.css`
+- Modify: `src/App.tsx` (Add Subscriptions navigation)
+
+- [x] **Step 1: Implement `detectSubscriptions` in `src/logic/engine.ts` (Identify recurring description/amount pairs)**
+- [x] **Step 2: Create `SubscriptionView` to list detected recurring expenses**
+- [x] **Step 3: Add "Ignore" or "Confirm" status to detected subscriptions**
+- [x] **Step 4: Calculate "Annual Leak" (Monthly cost * 12) for each subscription**
+- [x] **Step 5: Update `App.tsx` with a "Subscriptions" tab**
+- [x] **Step 6: Commit Subscription Audit feature**

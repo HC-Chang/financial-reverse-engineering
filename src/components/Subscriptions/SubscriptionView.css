@@ -1,0 +1,100 @@
+.subscriptions-container {
+  padding: 2.5rem;
+  overflow-y: auto;
+  flex-grow: 1;
+  background-color: #f4f7f6;
+  color: #333;
+}
+
+.subscriptions-header {
+  margin-bottom: 2rem;
+}
+
+.subscriptions-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #2c3e50;
+}
+
+.subscriptions-header p {
+  color: #7f8c8d;
+}
+
+.card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  margin-bottom: 2rem;
+}
+
+.leak-summary {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+  background: #2c3e50;
+  color: white;
+}
+
+.leak-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.leak-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #bdc3c7;
+  margin-bottom: 0.5rem;
+}
+
+.leak-value {
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+
+.leak-value.highlight {
+  color: #e74c3c;
+}
+
+.subs-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.subs-table th {
+  text-align: left;
+  padding: 1rem;
+  border-bottom: 2px solid #ecf0f1;
+  color: #7f8c8d;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.subs-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #f4f7f6;
+}
+
+.sub-desc {
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.sub-amount {
+  color: #e74c3c;
+  font-weight: 600;
+}
+
+.sub-annual {
+  font-weight: 700;
+}
+
+.audit-tips ul {
+  padding-left: 1.5rem;
+}
+
+.audit-tips li {
+  margin-bottom: 0.8rem;
+  color: #34495e;
+}

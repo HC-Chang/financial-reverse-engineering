@@ -2,6 +2,36 @@ import { differenceInMonths, differenceInDays, parseISO, addMonths, formatISO } 
 import { FinancialSettings, EngineResults, ProjectionPoint, Transaction, Account, AssetAllocation } from '../types/financial';
 
 /**
+ * Detects potential subscriptions by finding recurring transactions with the same description and amount.
+ * 
+ * @param transactions Array of transactions.
+ * @returns Array of detected subscriptions.
+ */
+export const detectSubscriptions = (transactions: Transaction[]) => {
+  const groups: Record<string, Transaction[]> = {};
+  
+  // Group by description and amount (rounded)
+  transactions.forEach(t => {
+    if (t.amount >= 0) return; // Only expenses
+    const key = `${t.description.toLowerCase()}-${Math.abs(Math.round(t.amount))}`;
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(t);
+  });
+
+  return Object.entries(groups)
+    .filter(([_, ts]) => ts.length >= 2) // Need at least 2 occurrences
+    .map(([_, ts]) => {
+      const avgAmount = ts.reduce((sum, t) => sum + t.amount, 0) / ts.length;
+      return {
+        description: ts[0].description,
+        monthlyAmount: Math.abs(avgAmount),
+        count: ts.length,
+        lastDate: ts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0].date
+      };
+    });
+};
+
+/**
  * Groups accounts by type and calculates the allocation percentages.
  * 
  * @param accounts Array of financial accounts.
