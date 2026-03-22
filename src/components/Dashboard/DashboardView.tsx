@@ -4,7 +4,11 @@ import { calculateRequiredFuel } from '../../logic/engine';
 import { formatCurrency } from '../../utils/formatters';
 import './DashboardView.css';
 
-const DashboardView: React.FC = () => {
+interface DashboardViewProps {
+  onNavigate: (tab: 'overview' | 'accounts') => void;
+}
+
+const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
   const { settings } = useSettings();
 
   const results = useMemo(() => {
@@ -19,7 +23,7 @@ const DashboardView: React.FC = () => {
   const { monthlyFuel, netWorthGoal, daysToFreedom } = results;
 
   return (
-    <div className="dashboard-layout">
+    <div className="dashboard-layout" style={{ width: '100%' }}>
       {/* Sidebar */}
       <aside className="sidebar">
         <div className="sidebar-brand">
@@ -27,10 +31,14 @@ const DashboardView: React.FC = () => {
         </div>
         <nav className="sidebar-nav">
           <ul>
-            <li className="active"><a href="#">Overview</a></li>
-            <li><a href="#">Accounts</a></li>
-            <li><a href="#">CSV Import</a></li>
-            <li><a href="#">Settings</a></li>
+            <li className="active">
+              <a href="#" onClick={(e) => { e.preventDefault(); onNavigate('overview'); }}>Overview</a>
+            </li>
+            <li>
+              <a href="#" onClick={(e) => { e.preventDefault(); onNavigate('accounts'); }}>Accounts</a>
+            </li>
+            <li><a href="#" onClick={(e) => e.preventDefault()}>CSV Import</a></li>
+            <li><a href="#" onClick={(e) => e.preventDefault()}>Settings</a></li>
           </ul>
         </nav>
         <div className="sidebar-footer">
@@ -66,10 +74,37 @@ const DashboardView: React.FC = () => {
         </section>
 
         <section className="dashboard-charts">
-          {/* Charts will go here in later tasks */}
-          <div className="placeholder-chart">
-            <h3>Engine Progress</h3>
-            <p>Projection details will be implemented in Task 5.</p>
+          <div className="projection-container">
+            <h3>Engine Progress (Milestones)</h3>
+            <div className="projection-table-wrapper">
+              <table className="projection-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Projected Balance</th>
+                    <th>Progress</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {results.projection
+                    .filter((_, index) => index % 12 === 0 || index === results.projection.length - 1)
+                    .map((point, index) => (
+                      <tr key={index}>
+                        <td>{new Date(point.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}</td>
+                        <td>{formatCurrency(point.balance)}</td>
+                        <td>
+                          <div className="progress-bar-bg">
+                            <div 
+                              className="progress-bar-fill" 
+                              style={{ width: `${Math.min(100, (point.balance / results.netWorthGoal) * 100)}%` }}
+                            ></div>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </section>
       </main>

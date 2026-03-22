@@ -1,0 +1,147 @@
+.accounts-container {
+  padding: 2.5rem;
+  overflow-y: auto;
+  flex-grow: 1;
+  background-color: #f4f7f6;
+  color: #333;
+}
+
+.accounts-header {
+  margin-bottom: 3rem;
+}
+
+.accounts-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.accounts-header p {
+  margin: 0.5rem 0 0;
+  color: #7f8c8d;
+  font-size: 1.1rem;
+}
+
+.accounts-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.card h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
+  font-size: 1.2rem;
+}
+
+.account-form .form-group {
+  margin-bottom: 1.2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.account-form label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #7f8c8d;
+  margin-bottom: 0.4rem;
+}
+
+.account-form input,
+.account-form select {
+  padding: 0.8rem;
+  border: 1px solid #dcdde1;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.account-form input:focus {
+  border-color: #1abc9c;
+  outline: none;
+}
+
+.add-button {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: #1abc9c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-button:hover {
+  background-color: #16a085;
+}
+
+.accounts-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.accounts-table th {
+  text-align: left;
+  padding: 1rem;
+  border-bottom: 2px solid #ecf0f1;
+  color: #7f8c8d;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.accounts-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #f4f7f6;
+}
+
+.type-badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.type-badge.cash { background-color: #e3f2fd; color: #1976d2; }
+.type-badge.taxable { background-color: #e8f5e9; color: #2e7d32; }
+.type-badge.roth { background-color: #f3e5f5; color: #7b1fa2; }
+.type-badge.traditional { background-color: #fff3e0; color: #e65100; }
+
+.delete-button {
+  background: none;
+  border: none;
+  color: #e74c3c;
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.delete-button:hover {
+  color: #c0392b;
+}
+
+.empty-msg {
+  color: #95a5a6;
+  text-align: center;
+  padding: 2rem;
+}
+
+@media (max-width: 900px) {
+  .accounts-grid {
+    grid-template-columns: 1fr;
+  }
+}

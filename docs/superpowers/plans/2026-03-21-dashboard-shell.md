@@ -71,14 +71,32 @@
 - [ ] **Step 5: Verify dashboard updates in real-time when settings change**
 - [ ] **Step 6: Commit Dashboard shell**
 
-### Task 5: PWA Finalization
+### Task 5: Projection Engine & PWA Finalization
 
 **Files:**
+- Modify: `src/logic/engine.ts`
+- Modify: `src/components/Dashboard/DashboardView.tsx`
 - Modify: `vite.config.ts` (Refine manifest)
 - Create: `public/icons/` (Placeholder icons)
 
-- [ ] **Step 1: Refine PWA manifest in `vite.config.ts` (theme color, icons, short name)**
-- [ ] **Step 2: Add placeholder icons to `public/icons/`**
-- [ ] **Step 3: Verify "Install App" and offline caching in Chrome DevTools**
-- [ ] **Step 4: Final verification of Onboarding -> Dashboard flow**
-- [ ] **Step 5: Commit PWA configuration**
+- [x] **Step 1: Refine PWA manifest in `vite.config.ts` (theme color, icons, short name)**
+- [x] **Step 2: Add placeholder icons to `public/icons/`**
+- [ ] **Step 3: Implement `calculateProjection` in `src/logic/engine.ts` to return monthly data points**
+- [ ] **Step 4: Update `DashboardView.tsx` to display a simple projection chart or table**
+- [ ] **Step 5: Verify "Install App" and offline caching in Chrome DevTools**
+- [ ] **Step 6: Final verification of Onboarding -> Dashboard flow**
+- [ ] **Step 7: Commit Projection & PWA configuration**
+
+### Task 6: Account Management (Dexie.js)
+
+**Files:**
+- Modify: `src/db/database.ts` (Add `accounts` table)
+- Create: `src/components/Accounts/AccountsView.tsx`
+- Create: `src/components/Accounts/AccountsView.css`
+- Modify: `src/App.tsx` (Add routing/view switching for Accounts)
+
+- [ ] **Step 1: Update `FinancialDatabase` schema to include `accounts` table**
+- [ ] **Step 2: Implement `AccountsView` to list, add, and delete financial accounts**
+- [ ] **Step 3: Update `App.tsx` to handle navigation between Overview and Accounts**
+- [ ] **Step 4: Verify accounts are correctly saved to IndexedDB**
+- [ ] **Step 5: Commit Account management feature**

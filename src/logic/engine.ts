@@ -1,5 +1,5 @@
-import { differenceInMonths, differenceInDays, parseISO } from 'date-fns';
-import { FinancialSettings, EngineResults } from '../types/financial';
+import { differenceInMonths, differenceInDays, parseISO, addMonths, formatISO } from 'date-fns';
+import { FinancialSettings, EngineResults, ProjectionPoint } from '../types/financial';
 
 /**
  * Calculates the required monthly investment (fuel) to reach a financial goal.
@@ -59,9 +59,31 @@ export const calculateRequiredFuel = (settings: FinancialSettings): EngineResult
     monthlyFuel = initialAssets >= targetNetWorth ? 0 : Infinity;
   }
 
+  // 4. Generate Projection
+  const projection: ProjectionPoint[] = [];
+  let currentBalance = initialAssets;
+  const startDate = new Date();
+
+  // Add initial point
+  projection.push({
+    date: formatISO(startDate),
+    balance: currentBalance,
+  });
+
+  // Calculate points for each month
+  for (let i = 1; i <= monthsToTarget; i++) {
+    // Apply growth and contribution
+    currentBalance = currentBalance * (1 + monthlyReturn) + monthlyFuel;
+    projection.push({
+      date: formatISO(addMonths(startDate, i)),
+      balance: currentBalance,
+    });
+  }
+
   return {
     monthlyFuel: Math.max(0, monthlyFuel),
     netWorthGoal: targetNetWorth,
     daysToFreedom,
+    projection,
   };
 };

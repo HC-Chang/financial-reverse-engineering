@@ -32,18 +32,30 @@ if (results.daysToFreedom >= 3650 && results.daysToFreedom <= 3654) {
 }
 
 // Monthly fuel: using PMT formula for $1.5M goal from $50k initial, 7% return, 10 years (120 months)
-// PMT = (FV * r) / ((1 + r)^n - 1) - (PV * r * (1 + r)^n) / ((1 + r)^n - 1)
-// r = 0.07 / 12 = 0.0058333
-// n = 120
-// FV = 1500000
-// PV = 50000
-// (1+r)^n = (1.0058333)^120 = 2.010
-// term1 = (1500000 * 0.0058333) / (2.010 - 1) = 8750 / 1.01 = 8663
-// term2 = (50000 * 0.0058333 * 2.010) / (2.010 - 1) = 586 / 1.01 = 580
-// monthlyFuel = 8663 - 580 = 8083 approx
 console.log('Calculated Monthly Fuel:', results.monthlyFuel);
 if (results.monthlyFuel > 7500 && results.monthlyFuel < 8500) {
   console.log('✅ Monthly Fuel calculation seems reasonable.');
 } else {
   console.log('❌ Monthly Fuel calculation seems off.');
+}
+
+// Projection tests
+if (results.projection.length >= 120 && results.projection.length <= 122) {
+  console.log('✅ Projection length is correct (approx 120 months).');
+} else {
+  console.log('❌ Projection length is incorrect. Got:', results.projection.length);
+}
+
+const lastPoint = results.projection[results.projection.length - 1];
+if (Math.abs(lastPoint.balance - expectedNetWorth) < 1.0) {
+  console.log('✅ Projection reaches the net worth goal.');
+} else {
+  console.log('❌ Projection does not reach net worth goal. Final balance:', lastPoint.balance);
+}
+
+const firstPoint = results.projection[0];
+if (firstPoint.balance === testSettings.initialAssets) {
+  console.log('✅ Projection starts with initial assets.');
+} else {
+  console.log('❌ Projection does not start with initial assets. First balance:', firstPoint.balance);
 }
