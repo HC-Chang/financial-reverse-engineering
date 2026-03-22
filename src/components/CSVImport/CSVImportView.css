@@ -1,0 +1,116 @@
+.csv-import-container {
+  padding: 2.5rem;
+  overflow-y: auto;
+  flex-grow: 1;
+  background-color: #f4f7f6;
+  color: #333;
+}
+
+.csv-header {
+  margin-bottom: 2rem;
+}
+
+.csv-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #2c3e50;
+}
+
+.csv-header p {
+  color: #7f8c8d;
+}
+
+.import-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  max-width: 800px;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #34495e;
+}
+
+.form-group select, 
+.form-group input {
+  padding: 0.8rem;
+  border: 1px solid #dcdde1;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.mapping-preview {
+  margin-top: 2rem;
+  border-top: 2px solid #f4f7f6;
+  padding-top: 2rem;
+}
+
+.mapping-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.mapping-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.mapping-item label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #7f8c8d;
+  margin-bottom: 0.4rem;
+}
+
+.preview-table-wrapper {
+  margin-bottom: 2rem;
+  overflow-x: auto;
+}
+
+.preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.preview-table th, 
+.preview-table td {
+  padding: 0.8rem;
+  text-align: left;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.import-button {
+  background-color: #1abc9c;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+}
+
+.import-button:hover {
+  background-color: #16a085;
+}
+
+.status-msg {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #f1f2f6;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: 600;
+}

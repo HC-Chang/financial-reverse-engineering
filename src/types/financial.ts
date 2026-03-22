@@ -16,6 +16,16 @@ export interface Account {
   lastUpdated: string;
 }
 
+export interface Transaction {
+  id?: number;
+  accountId: number;
+  date: string; // ISO string
+  amount: number;
+  description: string;
+  category: string;
+  hash: string; // For duplicate detection
+}
+
 export interface ProjectionPoint {
   date: string;
   balance: number;

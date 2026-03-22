@@ -23,35 +23,11 @@ const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
   const { monthlyFuel, netWorthGoal, daysToFreedom } = results;
 
   return (
-    <div className="dashboard-layout" style={{ width: '100%' }}>
-      {/* Sidebar */}
-      <aside className="sidebar">
-        <div className="sidebar-brand">
-          <h2>Reverse Engine</h2>
-        </div>
-        <nav className="sidebar-nav">
-          <ul>
-            <li className="active">
-              <a href="#" onClick={(e) => { e.preventDefault(); onNavigate('overview'); }}>Overview</a>
-            </li>
-            <li>
-              <a href="#" onClick={(e) => { e.preventDefault(); onNavigate('accounts'); }}>Accounts</a>
-            </li>
-            <li><a href="#" onClick={(e) => e.preventDefault()}>CSV Import</a></li>
-            <li><a href="#" onClick={(e) => e.preventDefault()}>Settings</a></li>
-          </ul>
-        </nav>
-        <div className="sidebar-footer">
-          <p>Logged in as User</p>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <main className="dashboard-content">
-        <header className="dashboard-header">
-          <h1>Financial Overview</h1>
-          <p>Your path to freedom is mapped out.</p>
-        </header>
+    <main className="dashboard-content">
+      <header className="dashboard-header">
+        <h1>Financial Overview</h1>
+        <p>Your path to freedom is mapped out.</p>
+      </header>
 
         <section className="stat-cards">
           <div className="stat-card">
@@ -108,7 +84,6 @@ const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
           </div>
         </section>
       </main>
-    </div>
   );
 };
 
