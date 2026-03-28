@@ -1,7 +1,7 @@
 // src/types/monteCarlo.ts
 export interface HistoricalDataPoint {
   date: string; // YYYY-MM
-  sp500: number; // Monthly total return (multiplier, e.g., 0.01 for 1%)
+  sp500: number; // Monthly decimal return 'r' (e.g., 0.01 for 1%, -0.05 for -5%)
   cpi: number; // Monthly CPI value
 }
 
