@@ -21,15 +21,15 @@
 - Create: `src/types/financial.ts`
 - Create: `src/styles/global.css`
 
-- [ ] **Step 1: Create `package.json` with dependencies (`dexie`, `dexie-react-hooks`, `date-fns`) and devDependencies (`vite-plugin-pwa`)**
-- [ ] **Step 2: Create `tsconfig.json` for TypeScript configuration**
-- [ ] **Step 3: Define core interfaces in `src/types/financial.ts` (Settings, EngineResults)**
-- [ ] **Step 4: Create `vite.config.ts` with React and PWA plugin (generateSW mode)**
-- [ ] **Step 5: Create `index.html` as the entry point**
-- [ ] **Step 6: Create `src/main.tsx` to bootstrap React**
-- [ ] **Step 7: Create `src/styles/global.css` with financial color theme and variables**
-- [ ] **Step 8: Run `npm install` and verify the dev server starts**
-- [ ] **Step 9: Commit initial project structure**
+- [x] **Step 1: Create `package.json` with dependencies (`dexie`, `dexie-react-hooks`, `date-fns`) and devDependencies (`vite-plugin-pwa`)**
+- [x] **Step 2: Create `tsconfig.json` for TypeScript configuration**
+- [x] **Step 3: Define core interfaces in `src/types/financial.ts` (Settings, EngineResults)**
+- [x] **Step 4: Create `vite.config.ts` with React and PWA plugin (generateSW mode)**
+- [x] **Step 5: Create `index.html` as the entry point**
+- [x] **Step 6: Create `src/main.tsx` to bootstrap React**
+- [x] **Step 7: Create `src/styles/global.css` with financial color theme and variables**
+- [x] **Step 8: Run `npm install` and verify the dev server starts**
+- [x] **Step 9: Commit initial project structure**
 
 ### Task 2: Persistence Layer & Context (Dexie.js)
 
@@ -38,11 +38,11 @@
 - Create: `src/context/SettingsContext.tsx`
 - Modify: `src/App.tsx`
 
-- [ ] **Step 1: Define `FinancialDatabase` class in `src/db/database.ts` with a singleton `settings` table**
-- [ ] **Step 2: Implement `SettingsProvider` in `src/context/SettingsContext.tsx` using `useLiveQuery`**
-- [ ] **Step 3: Update `src/App.tsx` to use `SettingsProvider` and swap between `OnboardingView` and `DashboardView`**
-- [ ] **Step 4: Verify Dexie initialization and context propagation**
-- [ ] **Step 5: Commit persistence layer**
+- [x] **Step 1: Define `FinancialDatabase` class in `src/db/database.ts` with a singleton `settings` table**
+- [x] **Step 2: Implement `SettingsProvider` in `src/context/SettingsContext.tsx` using `useLiveQuery`**
+- [x] **Step 3: Update `src/App.tsx` to use `SettingsProvider` and swap between `OnboardingView` and `DashboardView`**
+- [x] **Step 4: Verify Dexie initialization and context propagation**
+- [x] **Step 5: Commit persistence layer**
 
 ### Task 3: Onboarding View
 
@@ -51,11 +51,11 @@
 - Create: `src/components/Onboarding/OnboardingView.css`
 - Create: `src/utils/formatters.ts`
 
-- [ ] **Step 1: Implement `Intl.NumberFormat` helpers in `src/utils/formatters.ts`**
-- [ ] **Step 2: Build the single-page form UI in `OnboardingView.tsx` with validation (no 0% withdrawal rate)**
-- [ ] **Step 3: Implement `handleCalculate` to save the singleton record (ID: 1) to Dexie**
-- [ ] **Step 4: Verify form correctly updates IndexedDB and triggers view switch**
-- [ ] **Step 5: Commit Onboarding view**
+- [x] **Step 1: Implement `Intl.NumberFormat` helpers in `src/utils/formatters.ts`**
+- [x] **Step 2: Build the single-page form UI in `OnboardingView.tsx` with validation (no 0% withdrawal rate)**
+- [x] **Step 3: Implement `handleCalculate` to save the singleton record (ID: 1) to Dexie**
+- [x] **Step 4: Verify form correctly updates IndexedDB and triggers view switch**
+- [x] **Step 5: Commit Onboarding view**
 
 ### Task 4: Dashboard Shell & Logic Engine
 
@@ -64,12 +64,12 @@
 - Create: `src/components/Dashboard/DashboardView.tsx`
 - Create: `src/components/Dashboard/DashboardView.css`
 
-- [ ] **Step 1: Implement the "Monthly Fuel" PMT formula in `src/logic/engine.ts`**
-- [ ] **Step 2: Create `DashboardView.tsx` and fetch settings from `SettingsContext`**
-- [ ] **Step 3: Build stat cards for "Monthly Fuel," "Net Worth Goal," and "Days to Freedom" (using `date-fns`)**
-- [ ] **Step 4: Implement persistent navigation sidebar (layout shell)**
-- [ ] **Step 5: Verify dashboard updates in real-time when settings change**
-- [ ] **Step 6: Commit Dashboard shell**
+- [x] **Step 1: Implement the "Monthly Fuel" PMT formula in `src/logic/engine.ts`**
+- [x] **Step 2: Create `DashboardView.tsx` and fetch settings from `SettingsContext`**
+- [x] **Step 3: Build stat cards for "Monthly Fuel," "Net Worth Goal," and "Days to Freedom" (using `date-fns`)**
+- [x] **Step 4: Implement persistent navigation sidebar (layout shell)**
+- [x] **Step 5: Verify dashboard updates in real-time when settings change**
+- [x] **Step 6: Commit Dashboard shell**
 
 ### Task 5: Projection Engine & PWA Finalization
 
@@ -83,8 +83,8 @@
 - [x] **Step 2: Add placeholder icons to `public/icons/`**
 - [x] **Step 3: Implement `calculateProjection` in `src/logic/engine.ts` to return monthly data points**
 - [x] **Step 4: Update `DashboardView.tsx` to display a simple projection chart or table**
-- [ ] **Step 5: Verify "Install App" and offline caching in Chrome DevTools**
-- [ ] **Step 6: Final verification of Onboarding -> Dashboard flow**
+- [x] **Step 5: Verify "Install App" and offline caching in Chrome DevTools**
+- [x] **Step 6: Final verification of Onboarding -> Dashboard flow**
 - [x] **Step 7: Commit Projection & PWA configuration**
 
 ### Task 6: Account Management (Dexie.js)
@@ -176,3 +176,18 @@
 - [x] **Step 4: Display "Effective Rate" projections for current vs. target retirement**
 - [x] **Step 5: Update `App.tsx` with a "Tax Strategy" tab**
 - [x] **Step 6: Commit Tax Strategy feature**
+
+### Task 12: Settings & Data Management (Danger Zone)
+
+**Files:**
+- Create: `src/components/Settings/SettingsView.tsx`
+- Create: `src/components/Settings/SettingsView.css`
+- Modify: `src/App.tsx` (Add Settings navigation)
+
+- [x] **Step 1: Create `SettingsView` to allow updating initial onboarding parameters**
+- [x] **Step 2: Implement "Export Data" (JSON) for local backup**
+- [x] **Step 3: Implement "Clear All Data" (Danger Zone) with confirmation**
+- [x] **Step 4: Update `App.tsx` to link the "Settings" sidebar item**
+- [x] **Step 5: Verify all onboarding fields are editable and persist to Dexie**
+- [ ] **Step 6: Commit Settings feature**
+

@@ -7,10 +7,11 @@ import CSVImportView from './components/CSVImport/CSVImportView';
 import RebalanceView from './components/Rebalance/RebalanceView';
 import SubscriptionView from './components/Subscriptions/SubscriptionView';
 import TaxView from './components/Tax/TaxView';
+import SettingsView from './components/Settings/SettingsView';
 
 const AppContent: React.FC = () => {
   const { settings, isLoading } = useSettings();
-  const [activeTab, setActiveTab] = useState<'overview' | 'accounts' | 'csv' | 'rebalance' | 'subscriptions' | 'tax'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'accounts' | 'csv' | 'rebalance' | 'subscriptions' | 'tax' | 'settings'>('overview');
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -20,7 +21,7 @@ const AppContent: React.FC = () => {
     return <OnboardingView />;
   }
 
-  const handleNavigate = (tab: 'overview' | 'accounts' | 'csv' | 'rebalance' | 'subscriptions' | 'tax') => {
+  const handleNavigate = (tab: 'overview' | 'accounts' | 'csv' | 'rebalance' | 'subscriptions' | 'tax' | 'settings') => {
     setActiveTab(tab);
   };
 
@@ -32,6 +33,7 @@ const AppContent: React.FC = () => {
       case 'rebalance': return <RebalanceView />;
       case 'subscriptions': return <SubscriptionView />;
       case 'tax': return <TaxView />;
+      case 'settings': return <SettingsView />;
       default: return <DashboardView onNavigate={handleNavigate} />;
     }
   };
@@ -63,7 +65,9 @@ const AppContent: React.FC = () => {
             <li className={activeTab === 'csv' ? 'active' : ''}>
               <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('csv'); }}>CSV Import</a>
             </li>
-            <li><a href="#" onClick={(e) => e.preventDefault()}>Settings</a></li>
+            <li className={activeTab === 'settings' ? 'active' : ''}>
+              <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('settings'); }}>Settings</a>
+            </li>
           </ul>
         </nav>
         <div className="sidebar-footer">

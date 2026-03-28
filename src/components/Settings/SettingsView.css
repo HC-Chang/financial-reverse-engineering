@@ -1,0 +1,143 @@
+.settings-container {
+  padding: 2.5rem;
+  overflow-y: auto;
+  flex-grow: 1;
+  background-color: #f4f7f6;
+  color: #333;
+}
+
+.settings-header {
+  margin-bottom: 2rem;
+}
+
+.settings-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #2c3e50;
+}
+
+.settings-header p {
+  color: #7f8c8d;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.settings-form .form-group {
+  margin-bottom: 1.2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-form .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.settings-form label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #7f8c8d;
+  margin-bottom: 0.4rem;
+}
+
+.settings-form input {
+  padding: 0.8rem;
+  border: 1px solid #dcdde1;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.save-button {
+  background-color: #1abc9c;
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+}
+
+.save-button:hover {
+  background-color: #16a085;
+}
+
+.status-msg.success {
+  margin-top: 1rem;
+  color: #27ae60;
+  font-weight: 600;
+  text-align: center;
+}
+
+.management-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.action-item p {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  margin-bottom: 1rem;
+}
+
+.secondary-button {
+  background-color: #34495e;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.danger-zone {
+  border-top: 2px solid #f4f7f6;
+  padding-top: 2rem;
+}
+
+.danger-zone h4 {
+  color: #e74c3c;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.danger-zone p {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  margin-bottom: 1.2rem;
+}
+
+.danger-button {
+  background-color: white;
+  color: #e74c3c;
+  border: 2px solid #e74c3c;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.danger-button:hover {
+  background-color: #e74c3c;
+  color: white;
+}
+
+@media (max-width: 900px) {
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
