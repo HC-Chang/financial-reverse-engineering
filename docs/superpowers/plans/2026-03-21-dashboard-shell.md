@@ -189,5 +189,5 @@
 - [x] **Step 3: Implement "Clear All Data" (Danger Zone) with confirmation**
 - [x] **Step 4: Update `App.tsx` to link the "Settings" sidebar item**
 - [x] **Step 5: Verify all onboarding fields are editable and persist to Dexie**
-- [ ] **Step 6: Commit Settings feature**
+- [x] **Step 6: Commit Settings feature**
 
