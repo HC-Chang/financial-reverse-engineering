@@ -8,10 +8,11 @@ import RebalanceView from './components/Rebalance/RebalanceView';
 import SubscriptionView from './components/Subscriptions/SubscriptionView';
 import TaxView from './components/Tax/TaxView';
 import SettingsView from './components/Settings/SettingsView';
+import MonteCarloView from './components/MonteCarlo/MonteCarloView';
 
 const AppContent: React.FC = () => {
   const { settings, isLoading } = useSettings();
-  const [activeTab, setActiveTab] = useState<'overview' | 'accounts' | 'csv' | 'rebalance' | 'subscriptions' | 'tax' | 'settings'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'accounts' | 'csv' | 'rebalance' | 'subscriptions' | 'tax' | 'settings' | 'resilience'>('overview');
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -21,7 +22,7 @@ const AppContent: React.FC = () => {
     return <OnboardingView />;
   }
 
-  const handleNavigate = (tab: 'overview' | 'accounts' | 'csv' | 'rebalance' | 'subscriptions' | 'tax' | 'settings') => {
+  const handleNavigate = (tab: 'overview' | 'accounts' | 'csv' | 'rebalance' | 'subscriptions' | 'tax' | 'settings' | 'resilience') => {
     setActiveTab(tab);
   };
 
@@ -34,6 +35,7 @@ const AppContent: React.FC = () => {
       case 'subscriptions': return <SubscriptionView />;
       case 'tax': return <TaxView />;
       case 'settings': return <SettingsView />;
+      case 'resilience': return <MonteCarloView />;
       default: return <DashboardView onNavigate={handleNavigate} />;
     }
   };
@@ -49,6 +51,9 @@ const AppContent: React.FC = () => {
           <ul>
             <li className={activeTab === 'overview' ? 'active' : ''}>
               <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('overview'); }}>Overview</a>
+            </li>
+            <li className={activeTab === 'resilience' ? 'active' : ''}>
+              <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('resilience'); }}>Resilience</a>
             </li>
             <li className={activeTab === 'accounts' ? 'active' : ''}>
               <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('accounts'); }}>Accounts</a>
