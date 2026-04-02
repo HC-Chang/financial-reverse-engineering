@@ -113,6 +113,15 @@
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
 }
 
+.stat-card.highlight {
+  border: 1px solid #1abc9c;
+  background-color: #f0fff4;
+}
+
+.stat-card.highlight .stat-value {
+  color: #1abc9c;
+}
+
 .stat-label {
   font-size: 0.9rem;
   font-weight: 600;
@@ -132,6 +141,104 @@
 .stat-hint {
   font-size: 0.8rem;
   color: #95a5a6;
+}
+
+/* Main Grid Layout */
+.dashboard-main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.dashboard-column.card {
+  margin-bottom: 0;
+}
+
+.action-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #1abc9c;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: color 0.2s;
+}
+
+.action-link:hover {
+  color: #16a085;
+  text-decoration: underline;
+}
+
+/* Mini Lists */
+.mini-transactions, .mini-accounts {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mini-t-row, .mini-acc-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #f4f7f6;
+}
+
+.mini-t-row:last-child, .mini-acc-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.t-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.t-desc {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 0.95rem;
+}
+
+.t-date, .acc-name {
+  font-size: 0.8rem;
+  color: #7f8c8d;
+}
+
+.t-amount {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.t-amount.expense {
+  color: #e74c3c;
+}
+
+.t-amount.income {
+  color: #27ae60;
+}
+
+.acc-balance {
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.empty-msg {
+  text-align: center;
+  color: #95a5a6;
+  padding: 1rem 0;
+  font-style: italic;
+}
+
+.empty-msg button {
+  background: none;
+  border: none;
+  color: #1abc9c;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: 600;
 }
 
 /* Projection Table Styling */

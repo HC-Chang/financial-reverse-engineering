@@ -20,6 +20,24 @@
   color: #7f8c8d;
 }
 
+.reset-button {
+  background-color: transparent;
+  border: 1px solid #dcdde1;
+  color: #7f8c8d;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reset-button:hover {
+  background-color: #f8f9fa;
+  border-color: #bdc3c7;
+  color: #2c3e50;
+}
+
 .rebalance-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;

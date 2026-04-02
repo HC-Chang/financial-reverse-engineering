@@ -12,9 +12,23 @@ export const parseCSV = (content: string): string[][] => {
   return lines
     .filter(line => line.trim().length > 0)
     .map(line => {
-      // Basic CSV parsing (handles quotes)
-      const matches = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-      return matches ? matches.map(m => m.replace(/^"|"$/g, '')) : line.split(',');
+      const result: string[] = [];
+      let current = '';
+      let inQuotes = false;
+      
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (char === '"') {
+          inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+          result.push(current.trim());
+          current = '';
+        } else {
+          current += char;
+        }
+      }
+      result.push(current.trim());
+      return result;
     });
 };
 

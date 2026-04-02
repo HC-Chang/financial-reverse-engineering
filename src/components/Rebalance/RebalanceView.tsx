@@ -29,13 +29,27 @@ const RebalanceView: React.FC = () => {
     setTargets(prev => ({ ...prev, [type]: num }));
   };
 
+  const handleReset = () => {
+    setTargets({
+      'Cash': 5,
+      'Taxable': 45,
+      'Roth': 25,
+      'Traditional': 25
+    });
+  };
+
   const targetTotal = Object.values(targets).reduce((a, b) => a + b, 0);
 
   return (
     <div className="rebalance-container">
       <header className="rebalance-header">
-        <h1>Asset Rebalancing</h1>
-        <p>Align your current allocation with your long-term strategy.</p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div>
+            <h1>Asset Rebalancing</h1>
+            <p>Align your current allocation with your long-term strategy.</p>
+          </div>
+          <button onClick={handleReset} className="reset-button">Reset to Default</button>
+        </div>
       </header>
 
       {totalAssets === 0 ? (

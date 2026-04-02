@@ -9,10 +9,11 @@ import SubscriptionView from './components/Subscriptions/SubscriptionView';
 import TaxView from './components/Tax/TaxView';
 import SettingsView from './components/Settings/SettingsView';
 import MonteCarloView from './components/MonteCarlo/MonteCarloView';
+import TransactionsView from './components/Transactions/TransactionsView';
 
 const AppContent: React.FC = () => {
   const { settings, isLoading } = useSettings();
-  const [activeTab, setActiveTab] = useState<'overview' | 'accounts' | 'csv' | 'rebalance' | 'subscriptions' | 'tax' | 'settings' | 'resilience'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'accounts' | 'csv' | 'rebalance' | 'subscriptions' | 'tax' | 'settings' | 'resilience' | 'transactions'>('overview');
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -22,7 +23,7 @@ const AppContent: React.FC = () => {
     return <OnboardingView />;
   }
 
-  const handleNavigate = (tab: 'overview' | 'accounts' | 'csv' | 'rebalance' | 'subscriptions' | 'tax' | 'settings' | 'resilience') => {
+  const handleNavigate = (tab: 'overview' | 'accounts' | 'csv' | 'rebalance' | 'subscriptions' | 'tax' | 'settings' | 'resilience' | 'transactions') => {
     setActiveTab(tab);
   };
 
@@ -36,6 +37,7 @@ const AppContent: React.FC = () => {
       case 'tax': return <TaxView />;
       case 'settings': return <SettingsView />;
       case 'resilience': return <MonteCarloView />;
+      case 'transactions': return <TransactionsView />;
       default: return <DashboardView onNavigate={handleNavigate} />;
     }
   };
@@ -57,6 +59,9 @@ const AppContent: React.FC = () => {
             </li>
             <li className={activeTab === 'accounts' ? 'active' : ''}>
               <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('accounts'); }}>Accounts</a>
+            </li>
+            <li className={activeTab === 'transactions' ? 'active' : ''}>
+              <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('transactions'); }}>Transactions</a>
             </li>
             <li className={activeTab === 'rebalance' ? 'active' : ''}>
               <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('rebalance'); }}>Rebalance</a>

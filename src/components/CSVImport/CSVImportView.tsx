@@ -38,13 +38,21 @@ const CSVImportView: React.FC = () => {
     let duplicateCount = 0;
 
     for (const row of transactions) {
-      if (row.length < 2) continue;
+      if (row.length < 2 || !row[mapping.dateIndex] || !row[mapping.amountIndex]) continue;
+
+      const rawAmount = row[mapping.amountIndex].replace(/[$,]/g, '');
+      const amount = parseFloat(rawAmount);
+
+      if (isNaN(amount)) {
+        console.warn('Skipping row with invalid amount:', row);
+        continue;
+      }
 
       const transactionData = {
         accountId: Number(selectedAccountId),
         date: row[mapping.dateIndex],
-        amount: parseFloat(row[mapping.amountIndex].replace(/[$,]/g, '')),
-        description: row[mapping.descriptionIndex],
+        amount: amount,
+        description: row[mapping.descriptionIndex] || 'No description',
         category: mapping.categoryIndex !== undefined ? row[mapping.categoryIndex] : 'Uncategorized',
       };
 

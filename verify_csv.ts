@@ -5,7 +5,8 @@ const csvContent = `Date,Description,Amount,Category
 2026-03-21,Employer,3000.00,Salary`;
 
 const parsed = parseCSV(csvContent);
-console.log('Parsed Rows:', parsed.length);
+console.log('Parsed Rows:', JSON.stringify(parsed, null, 2));
+console.log('Parsed Rows Count:', parsed.length);
 
 if (parsed.length === 3) {
   console.log('✅ CSV Parsing: Correct number of rows.');

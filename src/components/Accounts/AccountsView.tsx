@@ -7,7 +7,7 @@ import { calculateAccountBalance } from '../../logic/engine';
 import './AccountsView.css';
 
 const AccountRow: React.FC<{ account: Account; transactions: Transaction[] }> = ({ account, transactions }) => {
-  const calculatedBalance = calculateAccountBalance(transactions, 0); 
+  const calculatedBalance = calculateAccountBalance(transactions, account.openingBalance || 0); 
   const hasDiscrepancy = Math.abs(account.balance - calculatedBalance) > 0.01 && transactions.length > 0;
 
   const handleSync = async () => {
@@ -66,9 +66,12 @@ const AccountsView: React.FC = () => {
     e.preventDefault();
     if (!formData.name || !formData.balance) return;
 
+    const initialBalance = parseFloat(formData.balance);
+
     await db.accounts.add({
       name: formData.name,
-      balance: parseFloat(formData.balance),
+      balance: initialBalance,
+      openingBalance: initialBalance,
       type: formData.type,
       lastUpdated: new Date().toISOString(),
     });

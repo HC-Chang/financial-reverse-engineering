@@ -19,5 +19,8 @@ export interface MonteCarloResults {
   totalSimulations: number;
   successCount: number;
   worstCases: SimulationResult[];
+  bestCases: SimulationResult[];
+  medianBalance: number;
   stressGap: number;
+  stressDelay?: number; // in months
 }

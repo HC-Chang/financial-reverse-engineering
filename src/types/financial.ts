@@ -12,6 +12,7 @@ export interface Account {
   id?: number;
   name: string;
   balance: number;
+  openingBalance: number;
   type: 'Taxable' | 'Roth' | 'Traditional' | 'Cash';
   lastUpdated: string;
 }
