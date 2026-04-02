@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useSettings } from '../../context/SettingsContext';
-import { runMonteCarlo, calculateStressGap, calculateStressDelay } from '../../logic/monteCarloEngine';
+import { runMonteCarlo, calculateStressGap, calculateStressDelay, runHistoricalScenario } from '../../logic/monteCarloEngine';
 import { formatCurrency, formatPercent } from '../../utils/formatters';
+import AreaChart from '../Common/AreaChart';
 import './MonteCarloView.css';
 
 const HISTORICAL_CONTEXT: Record<string, string> = {
@@ -23,6 +24,7 @@ const HISTORICAL_CONTEXT: Record<string, string> = {
 
 const MonteCarloView: React.FC = () => {
   const { settings } = useSettings();
+  const [selectedEra, setSelectedEra] = useState<string | null>(null);
   
   const results = useMemo(() => {
     if (!settings) return null;
@@ -43,6 +45,13 @@ const MonteCarloView: React.FC = () => {
     if (!settings) return 0;
     return (settings.targetMonthlyIncome * 12) / (settings.withdrawalRate / 100);
   }, [settings]);
+
+  const scenarioData = useMemo(() => {
+    if (!selectedEra || !settings) return null;
+    const eraKey = selectedEra.split('-')[0];
+    const points = runHistoricalScenario(settings, eraKey);
+    return points.map(p => ({ x: p.month, y: p.balance, label: p.date }));
+  }, [selectedEra, settings]);
 
   if (!results) return <div className="monte-carlo-container">Loading simulations...</div>;
 
@@ -89,6 +98,23 @@ const MonteCarloView: React.FC = () => {
           <p className="hint">Shows your median path vs. the "Finish Line" across all historical simulations.</p>
         </section>
 
+        {selectedEra && scenarioData && (
+          <section className="deep-dive-card card full-width highlight">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h3>Scenario Deep Dive: {selectedEra} Replay</h3>
+              <button onClick={() => setSelectedEra(null)} className="close-btn">Close &times;</button>
+            </div>
+            <div style={{ height: '300px', marginTop: '1.5rem' }}>
+              <AreaChart 
+                data={scenarioData} 
+                height={300} 
+                color={(scenarioData[scenarioData.length-1]?.y || 0) <= 0 ? '#e74c3c' : '#1abc9c'} 
+              />
+            </div>
+            <p className="hint">Replaying your portfolio path if the {selectedEra} cycle started today.</p>
+          </section>
+        )}
+
         <section className="stress-gap-card card highlight">
           <h3>The Stress Gap</h3>
           {stressGap > 0 ? (
@@ -124,7 +150,11 @@ const MonteCarloView: React.FC = () => {
                   results.worstCases.map(wc => {
                     const event = getHistoricalEvent(wc.startDate);
                     return (
-                      <div key={wc.startDate} className="failure-item">
+                      <div 
+                        key={wc.startDate} 
+                        className="failure-item clickable"
+                        onClick={() => setSelectedEra(wc.startDate)}
+                      >
                         <div className="era-info">
                           <span className="era">{wc.startDate}</span>
                           {event && <span className="event-name"> ({event})</span>}
@@ -147,7 +177,11 @@ const MonteCarloView: React.FC = () => {
                 {results.bestCases.map(bc => {
                   const outperformance = (bc.finalBalance / targetNetWorth - 1) * 100;
                   return (
-                    <div key={bc.startDate} className="success-item">
+                    <div 
+                      key={bc.startDate} 
+                      className="success-item clickable"
+                      onClick={() => setSelectedEra(bc.startDate)}
+                    >
                       <span className="era">{bc.startDate}</span>
                       <span className="outcome">+{outperformance.toFixed(0)}% Over Goal</span>
                     </div>
