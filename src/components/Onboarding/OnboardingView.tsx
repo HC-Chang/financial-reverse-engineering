@@ -82,6 +82,7 @@ const OnboardingView: React.FC = () => {
         <form className="onboarding-form" onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="targetMonthlyIncome">Your Monthly Target (Spending)</label>
+            <p className="form-help">How much you want to spend each month in today's dollars.</p>
             <input
               type="number"
               id="targetMonthlyIncome"
@@ -96,6 +97,7 @@ const OnboardingView: React.FC = () => {
 
           <div className="form-group">
             <label htmlFor="initialAssets">Initial Investable Assets</label>
+            <p className="form-help">Total current value of your stocks, bonds, and cash.</p>
             <input
               type="number"
               id="initialAssets"
@@ -110,6 +112,7 @@ const OnboardingView: React.FC = () => {
 
           <div className="form-group">
             <label htmlFor="annualReturn">Expected Annual Return (%)</label>
+            <p className="form-help">Projected long-term growth (Inflation-adjusted). S&P 500 average is ~7%.</p>
             <input
               type="number"
               id="annualReturn"
@@ -124,6 +127,7 @@ const OnboardingView: React.FC = () => {
 
           <div className="form-group">
             <label htmlFor="withdrawalRate">Withdrawal Strategy (%)</label>
+            <p className="form-help">The percentage of assets you'll spend annually (e.g. the 4% rule).</p>
             <input
               type="number"
               id="withdrawalRate"
@@ -138,6 +142,7 @@ const OnboardingView: React.FC = () => {
 
           <div className="form-group">
             <label htmlFor="targetDate">The Finish Line</label>
+            <p className="form-help">When do you want to be financially free?</p>
             <input
               type="date"
               id="targetDate"

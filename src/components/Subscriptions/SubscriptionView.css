@@ -1,9 +1,7 @@
 .subscriptions-container {
-  padding: 2.5rem;
-  overflow-y: auto;
-  flex-grow: 1;
-  background-color: #f4f7f6;
-  color: #333;
+  padding: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 .subscriptions-header {
@@ -15,51 +13,76 @@
   font-size: 2rem;
   color: #2c3e50;
 }
-
-.subscriptions-header p {
-  color: #7f8c8d;
-}
-
-.card {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+.leak-summary-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
   margin-bottom: 2rem;
 }
 
 .leak-summary {
   display: flex;
-  justify-content: space-around;
-  text-align: center;
-  background: #2c3e50;
-  color: white;
+  gap: 2rem;
+  background: #fdfdfd;
+  margin-bottom: 0;
 }
 
-.leak-item {
+.freedom-impact-card {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: #f0fff4 !important;
+  border: 1px solid #c6f6d5 !important;
 }
 
-.leak-label {
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  color: #bdc3c7;
+.impact-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   margin-bottom: 0.5rem;
 }
 
-.leak-value {
-  font-size: 1.8rem;
-  font-weight: 800;
+.impact-icon {
+  font-size: 1.2rem;
 }
 
-.leak-value.highlight {
-  color: #e74c3c;
+.impact-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #27ae60;
+  letter-spacing: 0.05rem;
+}
+
+.impact-value {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #27ae60;
+  margin: 0.2rem 0;
+}
+
+.impact-hint {
+  font-size: 0.75rem;
+  color: #7f8c8d;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .leak-summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.subscriptions-list {
+  margin-bottom: 2rem;
 }
 
 .subs-table {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 1rem;
 }
 
 .subs-table th {
@@ -67,34 +90,130 @@
   padding: 1rem;
   border-bottom: 2px solid #ecf0f1;
   color: #7f8c8d;
-  font-size: 0.85rem;
-  text-transform: uppercase;
+  font-weight: 600;
 }
 
 .subs-table td {
   padding: 1rem;
-  border-bottom: 1px solid #f4f7f6;
+  border-bottom: 1px solid #ecf0f1;
 }
 
 .sub-desc {
-  font-weight: 700;
+  font-weight: 600;
   color: #2c3e50;
 }
 
 .sub-amount {
+  font-weight: 700;
   color: #e74c3c;
-  font-weight: 600;
 }
 
-.sub-annual {
-  font-weight: 700;
+.empty-msg {
+  color: #95a5a6;
+  text-align: center;
+  padding: 2rem;
 }
 
 .audit-tips ul {
-  padding-left: 1.5rem;
+  padding-left: 1.2rem;
 }
 
 .audit-tips li {
-  margin-bottom: 0.8rem;
+  margin-bottom: 1rem;
   color: #34495e;
+}
+
+/* New Styles for Pending section */
+.pending-section {
+  border-left: 4px solid #1abc9c;
+}
+
+.pending-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.pending-card {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #dee2e6;
+}
+
+.confidence-meter {
+  margin-top: 0.5rem;
+  background: #e9ecef;
+  border-radius: 4px;
+  height: 6px;
+  width: 100px;
+  position: relative;
+  overflow: hidden;
+}
+
+.confidence-bar {
+  height: 100%;
+  background: #3498db;
+  border-radius: 4px;
+}
+
+.confidence-label {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  font-size: 0.7rem !important;
+  color: #adb5bd !important;
+}
+
+.pending-info {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1.2rem;
+}
+
+.pending-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.confirm-btn {
+  background: #1abc9c;
+  color: white;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.dismiss-btn {
+  background: #ecf0f1;
+  color: #7f8c8d;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.action-link {
+  background: none;
+  border: none;
+  color: #3498db;
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
+}
+
+.action-link.danger {
+  color: #e74c3c;
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  margin-top: 0.2rem;
 }

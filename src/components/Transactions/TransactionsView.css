@@ -1,0 +1,122 @@
+.transactions-container {
+  padding: 2.5rem;
+  overflow-y: auto;
+  flex-grow: 1;
+  background-color: #f4f7f6;
+  color: #333;
+}
+
+.transactions-header {
+  margin-bottom: 2rem;
+}
+
+.transactions-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.transactions-header p {
+  margin: 0.5rem 0 0;
+  color: #7f8c8d;
+  font-size: 1.1rem;
+}
+
+.transactions-filters {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filter-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #7f8c8d;
+}
+
+.filter-group input,
+.filter-group select {
+  padding: 0.6rem 1rem;
+  border: 1px solid #dcdde1;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.filter-group input {
+  min-width: 300px;
+}
+
+.transactions-list {
+  padding: 0;
+}
+
+.transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.transactions-table th {
+  text-align: left;
+  padding: 1.2rem;
+  border-bottom: 2px solid #ecf0f1;
+  color: #7f8c8d;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.transactions-table td {
+  padding: 1.2rem;
+  border-bottom: 1px solid #f4f7f6;
+  font-size: 0.95rem;
+}
+
+.transactions-table tr.expense .amount-cell {
+  color: #e74c3c;
+  font-weight: 600;
+}
+
+.transactions-table tr.income .amount-cell {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+.cat-badge {
+  background-color: #f1f3f4;
+  color: #5f6368;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.account-cell {
+  color: #7f8c8d;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: #bdc3c7;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.delete-btn:hover {
+  color: #e74c3c;
+}
+
+.empty-msg {
+  padding: 3rem;
+  text-align: center;
+  color: #95a5a6;
+  font-style: italic;
+}

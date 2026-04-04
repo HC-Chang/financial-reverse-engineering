@@ -25,6 +25,20 @@ export interface Transaction {
   description: string;
   category: string;
   hash: string; // For duplicate detection
+  isSubscription?: boolean;
+  subscriptionId?: number;
+}
+
+export interface Subscription {
+  id?: number;
+  description: string;
+  monthlyAmount: number;
+  frequency: 'Monthly' | 'Quarterly' | 'Yearly';
+  status: 'Detected' | 'Confirmed' | 'Dismissed';
+  lastDate: string;
+  category: string;
+  confidence: number;
+  count: number;
 }
 
 export interface AssetAllocation {

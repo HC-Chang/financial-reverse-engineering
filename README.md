@@ -1,6 +1,6 @@
 # Financial Reverse Engineering Engine (V1)
 
-A modern, "engine-first" financial dashboard designed to calculate the exact monthly investment ("Fuel") required to reach your financial freedom target. Unlike typical budgeting apps, this system prioritizes mathematical projections and automated optimization.
+A modern, "engine-first" financial dashboard designed to calculate the exact monthly investment ("Fuel") required to reach your financial freedom target. Unlike typical budgeting apps, this system prioritizes mathematical projections, historical stress testing, and automated optimization.
 
 ---
 
@@ -29,43 +29,47 @@ Open your browser to `http://localhost:5173` to start using the app.
 
 ---
 
-## 📖 Tutorial Guide
+## 📖 Key Features
 
-### Step 1: The Onboarding Wizard
-When you first open the app, you'll be greeted by the **Onboarding Wizard**. This form captures the key parameters needed to calculate your financial "finish line":
+### 1. The Financial Freedom Engine
+Calculates your "Monthly Fuel"—the exact amount you need to invest each month to reach your target by your chosen date, using standard financial formulas (PMT).
 
-1.  **Your Monthly Target (Spending):** Enter the amount you want to be able to spend each month (in today's dollars) once you reach financial independence.
-2.  **Initial Investable Assets:** Enter the total value of your current investments (stocks, bonds, cash, etc.).
-3.  **Expected Annual Return (%):** Enter your projected long-term annual return (default is 7%).
-4.  **Withdrawal Strategy (%):** Enter your planned annual withdrawal rate (default is the standard 4% rule).
-5.  **The Finish Line:** Select the month and year you'd like to reach financial independence.
+### 2. Historical Resilience (Monte Carlo)
+Stress-test your plan against 100 years of real market data (S&P 500 returns and CPI inflation since 1926).
+- **Resilience Score:** See what percentage of historical market cycles your plan survives.
+- **Scenario Deep Dive:** Click on any historical era (like the Great Depression or 2008) to see an SVG visualization of how your portfolio would have performed.
+- **Stress Gap:** Calculate exactly how much extra fuel or time you need to make your plan "bulletproof" against every historical crash.
 
-Click **"Calculate & Start"** to persist your data locally and view your results.
+### 3. Asset Rebalancing
+Monitor your current allocation across Cash, Taxable, Roth, and Traditional accounts.
+- **Drift Analysis:** Automatically calculates how far you've drifted from your target allocation.
+- **Engine Suggestions:** Provides specific BUY/SELL orders to bring your portfolio back into alignment.
 
-### Step 2: Understanding the Dashboard
-Once onboarding is complete, you'll see your personalized **Financial Freedom Dashboard**:
+### 4. Tax Strategy & Optimization
+- **Retirement Tax Estimation:** Projects your effective tax rate in retirement based on current US tax brackets.
+- **Contribution Waterfall:** Provides a prioritized order of operations (Match -> Roth/HSA -> Trad -> Taxable) to minimize lifetime tax liability.
 
-- **Monthly Fuel Required:** This is the core "engine" output. It tells you exactly how much you need to invest *each month* to reach your target by your chosen date.
-- **Net Worth Goal:** This represents your "Freedom Number"—the total assets you need to sustain your target monthly spending based on your withdrawal rate.
-- **Days to Freedom:** A real-time countdown to your target date.
+### 5. Subscription Audit
+Import your transaction CSVs to automatically detect recurring "leaks" in your financial engine. See the annual impact of every subscription you maintain.
 
-### Step 3: Local Persistence & PWA
-- **Data Privacy:** All your financial data is stored locally in your browser's **IndexedDB** (via Dexie.js). No data is sent to a server.
+### 6. Privacy-First Data
+- **Local Persistence:** All your financial data is stored locally in your browser's **IndexedDB** (via Dexie.js). No data is sent to a server.
 - **Offline Use:** This app is a Progressive Web App (PWA). You can install it on your home screen or desktop and use it even when you're offline.
 
 ---
 
 ## 🛠 Tech Stack
 - **Frontend:** React, TypeScript, Vite
+- **Visuals:** SVG Area Charts (Dependency-free)
 - **Persistence:** Dexie.js (IndexedDB)
-- **Math:** Custom Logic Engine (PMT formula)
-- **Styling:** Vanilla CSS (Financial Theme)
+- **Math:** Custom Logic Engine & Monte Carlo Simulator
+- **Styling:** Vanilla CSS (Modern Financial Theme)
 - **PWA:** `vite-plugin-pwa`
 
 ---
 
 ## 📂 Detailed Documentation
 For more in-depth technical details, check out the `docs/` folder:
+- [Interactive Visualizations Plan](./docs/superpowers/plans/2026-04-02-interactive-visualizations.md)
+- [Monte Carlo Stress Test Design](./docs/superpowers/specs/2026-03-28-monte-carlo-stress-test-design.md)
 - [System Design Spec](./docs/superpowers/specs/2026-03-21-dashboard-shell-design.md)
-- [Implementation Plan](./docs/superpowers/plans/2026-03-21-dashboard-shell.md)
-- [Original Product Vision](./docs/superpowers/specs/2026-03-19-financial-reverse-engineering-design.md)

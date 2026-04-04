@@ -52,6 +52,14 @@
   margin-bottom: 0.4rem;
 }
 
+.form-help {
+  font-size: 0.7rem;
+  color: #bdc3c7;
+  margin-top: -0.2rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
 .settings-form input {
   padding: 0.8rem;
   border: 1px solid #dcdde1;

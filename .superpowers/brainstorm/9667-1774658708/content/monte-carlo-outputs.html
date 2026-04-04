@@ -1,0 +1,44 @@
+<h2>Monte Carlo: What's the primary "Answer"?</h2>
+<p class="subtitle">Monte Carlo simulations run thousands of scenarios. How should we summarize them for you?</p>
+
+<div class="options">
+  <div class="option" data-choice="success-rate" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Success Probability</h3>
+      <p>A single "Confidence Score" (e.g., 85%). Simple, actionable, and tells you if you're on track or need to adjust.</p>
+      <div class="placeholder" style="height: 100px; display: flex; align-items: center; justify-content: center;">
+        <div style="width: 80px; height: 80px; border-radius: 50%; border: 8px solid #2ecc71; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; color: #2ecc71;">85%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="outcome-distribution" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Outcome Distribution</h3>
+      <p>A "Fan Chart" showing the range of possibilities. Shows the "median" path vs. the lucky/unlucky extremes.</p>
+      <div class="placeholder" style="height: 100px; background: linear-gradient(90deg, transparent 0%, rgba(52, 152, 219, 0.2) 30%, rgba(52, 152, 219, 0.5) 50%, rgba(52, 152, 219, 0.2) 70%, transparent 100%); position: relative;">
+        <div style="position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: #3498db;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="stress-test" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Safety Buffer / Stress Test</h3>
+      <p>Focuses on the "failure" cases. Tells you the specific "Extra Fuel" needed to survive a historical 1929 or 2008 event.</p>
+      <div class="placeholder" style="height: 100px; display: flex; flex-direction: column; justify-content: center; gap: 8px; padding: 0 20px;">
+        <div style="height: 12px; background: #e74c3c; width: 100%; border-radius: 4px;"></div>
+        <div style="height: 12px; background: #f1c40f; width: 60%; border-radius: 4px;"></div>
+        <div style="height: 12px; background: #2ecc71; width: 30%; border-radius: 4px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Why it matters</h3>
+  <p>The **Success Rate** is best for confidence, the **Distribution** is best for visualizing uncertainty, and the **Stress Test** is best for aggressive "disaster-proofing" your plan.</p>
+</div>

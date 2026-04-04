@@ -6,16 +6,18 @@ import { calculateRequiredFuel } from '../../logic/engine';
 import { runMonteCarlo } from '../../logic/monteCarloEngine';
 import { formatCurrency, formatPercent } from '../../utils/formatters';
 import AreaChart from '../Common/AreaChart';
+import { Subscription } from '../../types/financial';
 import './DashboardView.css';
 
 interface DashboardViewProps {
-  onNavigate: (tab: 'overview' | 'accounts' | 'resilience' | 'transactions') => void;
+  onNavigate: (tab: 'overview' | 'accounts' | 'resilience' | 'transactions' | 'subscriptions') => void;
 }
 
 const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
   const { settings } = useSettings();
   const accounts = useLiveQuery(() => db.accounts.toArray(), []);
   const transactions = useLiveQuery(() => db.transactions.orderBy('date').reverse().limit(5).toArray(), []);
+  const subscriptions = useLiveQuery(() => db.subscriptions.toArray(), []);
 
   const results = useMemo(() => {
     if (!settings) return null;
@@ -26,6 +28,15 @@ const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
     if (!settings) return null;
     return runMonteCarlo(settings);
   }, [settings]);
+
+  const pendingSubsCount = useMemo(() => {
+    return subscriptions?.filter(s => s.status === 'Detected').length || 0;
+  }, [subscriptions]);
+
+  const totalMonthlyLeak = useMemo(() => {
+    return subscriptions?.filter(s => s.status === 'Confirmed')
+      .reduce((sum, s) => sum + s.monthlyAmount, 0) || 0;
+  }, [subscriptions]);
 
   const chartData = useMemo(() => {
     if (!results) return [];
@@ -51,6 +62,17 @@ const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
         <h1>Financial Overview</h1>
         <p>Your path to freedom is mapped out.</p>
       </header>
+
+      {pendingSubsCount > 0 && (
+        <section className="alert-banner warning" onClick={() => onNavigate('subscriptions')} style={{ cursor: 'pointer' }}>
+          <span className="alert-icon">🕵️</span>
+          <div className="alert-text">
+            <strong>{pendingSubsCount} New Potential Subscriptions Detected.</strong>
+            <span>Review these in the Subscription Audit to plug leaks.</span>
+          </div>
+          <span className="alert-action">View Audit →</span>
+        </section>
+      )}
 
       <section className="stat-cards">
         <div className="stat-card">
@@ -78,9 +100,11 @@ const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
         </div>
 
         <div className="stat-card">
-          <span className="stat-label">Days to Freedom</span>
-          <span className="stat-value">{daysToFreedom.toLocaleString()}</span>
-          <span className="stat-hint">Time left until your finish line</span>
+          <span className="stat-label">Confirmed Leak</span>
+          <span className="stat-value" style={{ color: totalMonthlyLeak > 0 ? '#e74c3c' : 'inherit' }}>
+            {formatCurrency(totalMonthlyLeak)}
+          </span>
+          <span className="stat-hint">Total monthly recurring expenses</span>
         </div>
       </section>
 

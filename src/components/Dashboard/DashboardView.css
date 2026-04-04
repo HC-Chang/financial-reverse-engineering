@@ -122,6 +122,55 @@
   color: #1abc9c;
 }
 
+.alert-banner {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.alert-banner:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
+.alert-banner.warning {
+  background: #fff8e1;
+  border: 1px solid #ffe082;
+  color: #856404;
+}
+
+.alert-icon {
+  font-size: 1.5rem;
+}
+
+.alert-text {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.alert-text strong {
+  font-size: 1.1rem;
+  margin-bottom: 0.2rem;
+}
+
+.alert-text span {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.alert-action {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.05rem;
+}
+
 .stat-label {
   font-size: 0.9rem;
   font-weight: 600;

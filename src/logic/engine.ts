@@ -1,34 +1,76 @@
 import { differenceInMonths, differenceInDays, parseISO, addMonths, formatISO } from 'date-fns';
-import { FinancialSettings, EngineResults, ProjectionPoint, Transaction, Account, AssetAllocation } from '../types/financial';
+import { FinancialSettings, EngineResults, ProjectionPoint, Transaction, Account, AssetAllocation, Subscription } from '../types/financial';
 
 /**
  * Detects potential subscriptions by finding recurring transactions with the same description and amount.
+ * Now identifies Monthly, Quarterly and Yearly frequencies.
  * 
  * @param transactions Array of transactions.
  * @returns Array of detected subscriptions.
  */
-export const detectSubscriptions = (transactions: Transaction[]) => {
+export const detectSubscriptions = (transactions: Transaction[]): Subscription[] => {
   const groups: Record<string, Transaction[]> = {};
   
-  // Group by description and amount (rounded)
+  // Group by description (fuzzy-ish) and rounded amount
   transactions.forEach(t => {
     if (t.amount >= 0) return; // Only expenses
-    const key = `${t.description.toLowerCase()}-${Math.abs(Math.round(t.amount))}`;
+    // Use a simplified description key to handle slight variations (e.g. "Netflix.com" vs "Netflix")
+    const simpleDesc = t.description.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 10);
+    const key = `${simpleDesc}-${Math.abs(Math.round(t.amount))}`;
     if (!groups[key]) groups[key] = [];
     groups[key].push(t);
   });
 
-  return Object.entries(groups)
-    .filter(([_, ts]) => ts.length >= 2) // Need at least 2 occurrences
-    .map(([_, ts]) => {
-      const avgAmount = ts.reduce((sum, t) => sum + t.amount, 0) / ts.length;
-      return {
-        description: ts[0].description,
-        monthlyAmount: Math.abs(avgAmount),
-        count: ts.length,
-        lastDate: ts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0].date
-      };
+  const detected: Subscription[] = [];
+
+  Object.values(groups).forEach(ts => {
+    if (ts.length < 2) return;
+
+    // Sort by date
+    ts.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+    // Calculate average gap in days
+    const gaps: number[] = [];
+    for (let i = 1; i < ts.length; i++) {
+      gaps.push(differenceInDays(parseISO(ts[i].date), parseISO(ts[i-1].date)));
+    }
+
+    const avgGap = gaps.reduce((a, b) => a + b, 0) / gaps.length;
+    let frequency: Subscription['frequency'] = 'Monthly';
+    let confidence = 0;
+
+    if (avgGap >= 25 && avgGap <= 35) {
+      frequency = 'Monthly';
+      confidence = 0.9;
+    } else if (avgGap >= 85 && avgGap <= 95) {
+      frequency = 'Quarterly';
+      confidence = 0.8;
+    } else if (avgGap >= 360 && avgGap <= 370) {
+      frequency = 'Yearly';
+      confidence = 0.7;
+    } else {
+      // Not a clear recurring frequency
+      return;
+    }
+
+    const avgAmount = Math.abs(ts.reduce((sum, t) => sum + t.amount, 0) / ts.length);
+    const monthlyAmount = frequency === 'Monthly' ? avgAmount : 
+                          frequency === 'Quarterly' ? avgAmount / 3 : 
+                          avgAmount / 12;
+
+    detected.push({
+      description: ts[0].description,
+      monthlyAmount,
+      frequency,
+      lastDate: ts[ts.length - 1].date,
+      status: 'Detected',
+      category: ts[0].category,
+      confidence,
+      count: ts.length
     });
+  });
+
+  return detected;
 };
 
 /**
@@ -105,6 +147,34 @@ export const calculateAllocation = (accounts: Account[]): AssetAllocation[] => {
  */
 export const calculateAccountBalance = (transactions: Transaction[], initialBalance: number = 0): number => {
   return transactions.reduce((sum, t) => sum + t.amount, initialBalance);
+};
+
+/**
+ * Calculates how many months it takes to reach a target net worth with a fixed monthly investment.
+ */
+export const calculateMonthsToGoal = (
+  initialAssets: number,
+  monthlyFuel: number,
+  targetNetWorth: number,
+  annualReturn: number
+): number => {
+  if (initialAssets >= targetNetWorth) return 0;
+  const r = (annualReturn / 100) / 12;
+  const p = monthlyFuel;
+
+  if (r === 0) {
+    return p > 0 ? (targetNetWorth - initialAssets) / p : Infinity;
+  }
+
+  // FV = PV*(1+r)^n + P*(((1+r)^n - 1)/r)
+  // Solve for n:
+  // FV*r = PV*r*(1+r)^n + P*(1+r)^n - P
+  // FV*r + P = (PV*r + P)*(1+r)^n
+  // (FV*r + P) / (PV*r + P) = (1+r)^n
+  // n = log((FV*r + P) / (PV*r + P)) / log(1+r)
+
+  const n = Math.log((targetNetWorth * r + p) / (initialAssets * r + p)) / Math.log(1 + r);
+  return n;
 };
 
 /**

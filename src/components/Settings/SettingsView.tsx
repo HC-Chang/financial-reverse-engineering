@@ -71,6 +71,7 @@ const SettingsView: React.FC = () => {
           <form onSubmit={handleSave} className="settings-form">
             <div className="form-group">
               <label>Target Monthly Income ($)</label>
+              <p className="form-help">Monthly spending in today's dollars.</p>
               <input 
                 type="number" 
                 value={formData.targetMonthlyIncome} 
@@ -79,6 +80,7 @@ const SettingsView: React.FC = () => {
             </div>
             <div className="form-group">
               <label>Initial Investable Assets ($)</label>
+              <p className="form-help">Current value of all stocks, bonds, and cash.</p>
               <input 
                 type="number" 
                 value={formData.initialAssets} 
@@ -88,6 +90,7 @@ const SettingsView: React.FC = () => {
             <div className="form-row">
               <div className="form-group">
                 <label>Annual Return (%)</label>
+                <p className="form-help">Inflation-adjusted growth.</p>
                 <input 
                   type="number" 
                   step="0.1"
@@ -97,6 +100,7 @@ const SettingsView: React.FC = () => {
               </div>
               <div className="form-group">
                 <label>Withdrawal Rate (%)</label>
+                <p className="form-help">Annual spend rate (e.g. 4%).</p>
                 <input 
                   type="number" 
                   step="0.1"
@@ -107,6 +111,7 @@ const SettingsView: React.FC = () => {
             </div>
             <div className="form-group">
               <label>Target Date</label>
+              <p className="form-help">When do you want to be financially free?</p>
               <input 
                 type="date" 
                 value={formData.targetDate} 
