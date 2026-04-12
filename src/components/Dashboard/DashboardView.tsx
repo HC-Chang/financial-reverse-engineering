@@ -19,15 +19,24 @@ const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
   const transactions = useLiveQuery(() => db.transactions.orderBy('date').reverse().limit(5).toArray(), []);
   const subscriptions = useLiveQuery(() => db.subscriptions.toArray(), []);
 
+  const totalBalance = useMemo(() => {
+    return (accounts || []).reduce((sum, acc) => sum + acc.balance, 0);
+  }, [accounts]);
+
   const results = useMemo(() => {
     if (!settings) return null;
-    return calculateRequiredFuel(settings);
+    return calculateRequiredFuel(settings, totalBalance);
+  }, [settings, totalBalance]);
+
+  const originalFuel = useMemo(() => {
+    if (!settings) return 0;
+    return calculateRequiredFuel(settings).monthlyFuel;
   }, [settings]);
 
   const mcResults = useMemo(() => {
     if (!settings) return null;
-    return runMonteCarlo(settings);
-  }, [settings]);
+    return runMonteCarlo(settings, undefined, undefined, totalBalance);
+  }, [settings, totalBalance]);
 
   const pendingSubsCount = useMemo(() => {
     return subscriptions?.filter(s => s.status === 'Detected').length || 0;
@@ -53,8 +62,6 @@ const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
 
   const { monthlyFuel, netWorthGoal, daysToFreedom } = results;
   const { resilienceScore } = mcResults;
-
-  const totalBalance = (accounts || []).reduce((sum, acc) => sum + acc.balance, 0);
 
   return (
     <main className="dashboard-content">
@@ -93,10 +100,23 @@ const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
           </button>
         </div>
 
-        <div className="stat-card">
+        <div className="stat-card highlight">
           <span className="stat-label">Monthly Fuel Required</span>
           <span className="stat-value">{formatCurrency(monthlyFuel)}</span>
-          <span className="stat-hint">Amount you need to invest monthly</span>
+          <div className="drift-indicator">
+            {monthlyFuel < originalFuel ? (
+              <span className="drift-tag ahead">
+                ▼ {formatCurrency(originalFuel - monthlyFuel)} Ahead
+              </span>
+            ) : monthlyFuel > originalFuel ? (
+              <span className="drift-tag lagging">
+                ▲ {formatCurrency(monthlyFuel - originalFuel)} Lagging
+              </span>
+            ) : (
+              <span className="drift-tag on-track">On Track</span>
+            )}
+          </div>
+          <span className="stat-hint">Based on live account balances</span>
         </div>
 
         <div className="stat-card">

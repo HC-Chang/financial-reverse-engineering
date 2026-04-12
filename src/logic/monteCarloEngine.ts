@@ -64,14 +64,17 @@ const simulateWindow = (
 export const runMonteCarlo = (
   settings: FinancialSettings, 
   overrideFuel?: number,
-  overrideHorizonMonths?: number
+  overrideHorizonMonths?: number,
+  currentNetWorth?: number
 ): MonteCarloResults => {
   const { initialAssets, targetMonthlyIncome, withdrawalRate, targetDate } = settings;
   
+  const effectiveAssets = currentNetWorth !== undefined ? currentNetWorth : initialAssets;
+
   // Use override fuel if provided, otherwise calculate it using the linear engine
   const monthlyFuel = overrideFuel !== undefined 
     ? overrideFuel 
-    : calculateRequiredFuel(settings).monthlyFuel;
+    : calculateRequiredFuel(settings, currentNetWorth).monthlyFuel;
   
   const now = new Date();
   const target = parseISO(targetDate);
@@ -85,7 +88,7 @@ export const runMonteCarlo = (
 
   // Loop through every possible starting point in history
   for (let i = 0; i < historicalData.length - horizonMonths; i++) {
-    results.push(simulateWindow(i, horizonMonths, initialAssets, monthlyFuel, targetNetWorth));
+    results.push(simulateWindow(i, horizonMonths, effectiveAssets, monthlyFuel, targetNetWorth));
   }
 
   const successCount = results.filter(r => r.success).length;
@@ -116,19 +119,21 @@ export interface ScenarioPoint {
  */
 export const runHistoricalScenario = (
   settings: FinancialSettings,
-  startYear: string
+  startYear: string,
+  currentNetWorth?: number
 ): ScenarioPoint[] => {
   const { initialAssets, targetDate } = settings;
+  const effectiveAssets = currentNetWorth !== undefined ? currentNetWorth : initialAssets;
   const now = new Date();
   const target = parseISO(targetDate);
   const horizonMonths = Math.max(1, differenceInMonths(target, now));
-  const { monthlyFuel } = calculateRequiredFuel(settings);
+  const { monthlyFuel } = calculateRequiredFuel(settings, currentNetWorth);
 
   const startIndex = historicalData.findIndex(d => d.date.startsWith(startYear));
   if (startIndex === -1) return [];
 
   const points: ScenarioPoint[] = [];
-  let balance = initialAssets;
+  let balance = effectiveAssets;
   const startCPI = historicalData[startIndex].cpi;
 
   for (let m = 0; m < horizonMonths && (startIndex + m) < historicalData.length; m++) {
@@ -151,8 +156,8 @@ export const runHistoricalScenario = (
 /**
  * Binary search for the minimal fuel that survives 100% of history
  */
-export const calculateStressGap = (settings: FinancialSettings): number => {
-  const { monthlyFuel } = calculateRequiredFuel(settings);
+export const calculateStressGap = (settings: FinancialSettings, currentNetWorth?: number): number => {
+  const { monthlyFuel } = calculateRequiredFuel(settings, currentNetWorth);
   
   let low = 0;
   let high = settings.targetMonthlyIncome * 5; // Reasonable upper bound
@@ -161,7 +166,7 @@ export const calculateStressGap = (settings: FinancialSettings): number => {
   // Binary search for the minimal fuel that survives 100% of history
   for (let i = 0; i < 15; i++) {
     const mid = (low + high) / 2;
-    const results = runMonteCarlo(settings, mid);
+    const results = runMonteCarlo(settings, mid, undefined, currentNetWorth);
     
     if (results.resilienceScore === 100) {
       bestFuel = mid;
@@ -177,14 +182,14 @@ export const calculateStressGap = (settings: FinancialSettings): number => {
 /**
  * Calculates the number of additional months needed to reach 100% resilience with current fuel
  */
-export const calculateStressDelay = (settings: FinancialSettings): number => {
+export const calculateStressDelay = (settings: FinancialSettings, currentNetWorth?: number): number => {
   const now = new Date();
   const target = parseISO(settings.targetDate);
   const baseHorizon = Math.max(1, differenceInMonths(target, now));
-  const { monthlyFuel } = calculateRequiredFuel(settings);
+  const { monthlyFuel } = calculateRequiredFuel(settings, currentNetWorth);
 
   // If already 100% resilient, no delay
-  if (runMonteCarlo(settings).resilienceScore === 100) {
+  if (runMonteCarlo(settings, undefined, undefined, currentNetWorth).resilienceScore === 100) {
     return 0;
   }
 
@@ -194,7 +199,7 @@ export const calculateStressDelay = (settings: FinancialSettings): number => {
 
   for (let i = 0; i < 15; i++) {
     const mid = Math.floor((low + high) / 2);
-    const results = runMonteCarlo(settings, monthlyFuel, mid);
+    const results = runMonteCarlo(settings, monthlyFuel, mid, currentNetWorth);
     
     if (results.resilienceScore === 100) {
       bestHorizon = mid;

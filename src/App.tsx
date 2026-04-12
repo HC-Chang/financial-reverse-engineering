@@ -85,9 +85,9 @@ const AppContent: React.FC = () => {
         </div>
       </aside>
 
-      <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+      <main className="main-content">
         {renderContent()}
-      </div>
+      </main>
     </div>
   );
 };

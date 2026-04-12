@@ -184,9 +184,10 @@ export const calculateMonthsToGoal = (
  * PMT = (FV * r) / ((1 + r)^n - 1) - (PV * r * (1 + r)^n) / ((1 + r)^n - 1)
  * 
  * @param settings Financial settings provided by the user.
+ * @param currentNetWorth Optional current net worth override (live data).
  * @returns Engine results including monthly fuel, net worth goal, and days to freedom.
  */
-export const calculateRequiredFuel = (settings: FinancialSettings): EngineResults => {
+export const calculateRequiredFuel = (settings: FinancialSettings, currentNetWorth?: number): EngineResults => {
   const {
     targetMonthlyIncome,
     initialAssets,
@@ -194,6 +195,9 @@ export const calculateRequiredFuel = (settings: FinancialSettings): EngineResult
     withdrawalRate,
     targetDate,
   } = settings;
+
+  // Use live net worth if provided, otherwise fall back to onboarding assets
+  const effectiveAssets = currentNetWorth !== undefined ? currentNetWorth : initialAssets;
 
   // 1. Calculate Target Net Worth
   // Withdrawal rate is provided as a percentage (e.g., 4 for 4%)
@@ -214,10 +218,10 @@ export const calculateRequiredFuel = (settings: FinancialSettings): EngineResult
 
   if (monthsToTarget > 0) {
     if (monthlyReturn === 0) {
-      monthlyFuel = (targetNetWorth - initialAssets) / monthsToTarget;
+      monthlyFuel = (targetNetWorth - effectiveAssets) / monthsToTarget;
     } else {
       const FV = targetNetWorth;
-      const PV = initialAssets;
+      const PV = effectiveAssets;
       const r = monthlyReturn;
       const n = monthsToTarget;
 
@@ -232,12 +236,12 @@ export const calculateRequiredFuel = (settings: FinancialSettings): EngineResult
     }
   } else {
     // If we've already reached the target date
-    monthlyFuel = initialAssets >= targetNetWorth ? 0 : Infinity;
+    monthlyFuel = effectiveAssets >= targetNetWorth ? 0 : Infinity;
   }
 
   // 4. Generate Projection
   const projection: ProjectionPoint[] = [];
-  let currentBalance = initialAssets;
+  let currentBalance = effectiveAssets;
   const startDate = new Date();
 
   // Add initial point

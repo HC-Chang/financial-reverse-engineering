@@ -1,9 +1,5 @@
 .accounts-container {
-  padding: 2.5rem;
-  overflow-y: auto;
-  flex-grow: 1;
-  background-color: #f4f7f6;
-  color: #333;
+  width: 100%;
 }
 
 .accounts-header {

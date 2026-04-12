@@ -19,21 +19,36 @@
   --danger-color: #e74c3c; /* Expense/Loss Red */
   --background-alt: #2c3e50;
   --text-muted: #bdc3c7;
+  --bg-card: #2c3e50;
+  --bg-card-alt: #34495e;
+  --text-primary: #ffffff;
+  --text-secondary: #bdc3c7;
+  --border-color: #34495e;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #1a1a1a;
 }
 
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+}
+
+.main-content {
+  flex-grow: 1;
+  min-height: 100vh;
+  padding: 2.5rem;
+  background-color: var(--background-alt);
+  color: var(--text-muted);
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (prefers-color-scheme: light) {
@@ -42,6 +57,11 @@ body {
     background-color: #ffffff;
     --background-alt: #f9f9f9;
     --text-muted: #666;
+    --bg-card: #ffffff;
+    --bg-card-alt: #f8f9fa;
+    --text-primary: #213547;
+    --text-secondary: #666;
+    --border-color: #ecf0f1;
   }
 }
 

@@ -1,4 +1,6 @@
 import React, { useMemo, useState } from 'react';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { db } from '../../db/database';
 import { useSettings } from '../../context/SettingsContext';
 import { runMonteCarlo, calculateStressGap, calculateStressDelay, runHistoricalScenario } from '../../logic/monteCarloEngine';
 import { formatCurrency, formatPercent } from '../../utils/formatters';
@@ -24,22 +26,27 @@ const HISTORICAL_CONTEXT: Record<string, string> = {
 
 const MonteCarloView: React.FC = () => {
   const { settings } = useSettings();
+  const accounts = useLiveQuery(() => db.accounts.toArray(), []);
   const [selectedEra, setSelectedEra] = useState<string | null>(null);
+
+  const totalBalance = useMemo(() => {
+    return (accounts || []).reduce((sum, acc) => sum + acc.balance, 0);
+  }, [accounts]);
   
   const results = useMemo(() => {
     if (!settings) return null;
-    return runMonteCarlo(settings);
-  }, [settings]);
+    return runMonteCarlo(settings, undefined, undefined, totalBalance);
+  }, [settings, totalBalance]);
 
   const stressGap = useMemo(() => {
     if (!settings) return 0;
-    return calculateStressGap(settings);
-  }, [settings]);
+    return calculateStressGap(settings, totalBalance);
+  }, [settings, totalBalance]);
 
   const stressDelay = useMemo(() => {
     if (!settings) return 0;
-    return calculateStressDelay(settings);
-  }, [settings]);
+    return calculateStressDelay(settings, totalBalance);
+  }, [settings, totalBalance]);
 
   const targetNetWorth = useMemo(() => {
     if (!settings) return 0;
@@ -49,9 +56,9 @@ const MonteCarloView: React.FC = () => {
   const scenarioData = useMemo(() => {
     if (!selectedEra || !settings) return null;
     const eraKey = selectedEra.split('-')[0];
-    const points = runHistoricalScenario(settings, eraKey);
+    const points = runHistoricalScenario(settings, eraKey, totalBalance);
     return points.map(p => ({ x: p.month, y: p.balance, label: p.date }));
-  }, [selectedEra, settings]);
+  }, [selectedEra, settings, totalBalance]);
 
   if (!results) return <div className="monte-carlo-container">Loading simulations...</div>;
 
