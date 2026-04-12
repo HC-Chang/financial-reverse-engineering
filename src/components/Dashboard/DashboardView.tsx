@@ -58,7 +58,7 @@ const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
   }, [results]);
 
   if (!settings || !results || !mcResults) {
-    return <div>Loading...</div>;
+    return <div>{t('common.loading')}</div>;
   }
 
   const { monthlyFuel, netWorthGoal } = results;
@@ -75,10 +75,10 @@ const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
         <section className="alert-banner warning" onClick={() => onNavigate('subscriptions')} style={{ cursor: 'pointer' }}>
           <span className="alert-icon">🕵️</span>
           <div className="alert-text">
-            <strong>{pendingSubsCount} New Potential Subscriptions Detected.</strong>
-            <span>Review these in the Subscription Audit to plug leaks.</span>
+            <strong>{t('dashboard.newSubsAlert', { count: pendingSubsCount })}</strong>
+            <span>{t('dashboard.reviewLeaks')}</span>
           </div>
-          <span className="alert-action">View Audit →</span>
+          <span className="alert-action">{t('dashboard.viewAudit')}</span>
         </section>
       )}
 
@@ -150,7 +150,7 @@ const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
               ))}
             </div>
           ) : (
-            <p className="empty-msg">No transactions yet. <button onClick={() => onNavigate('transactions')}>Import CSV</button></p>
+            <p className="empty-msg">{t('common.noData')} <button onClick={() => onNavigate('transactions')}>{t('common.import')}</button></p>
           )}
         </section>
 
@@ -169,7 +169,7 @@ const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
               ))}
             </div>
           ) : (
-            <p className="empty-msg">No accounts added. <button onClick={() => onNavigate('accounts')}>Add Account</button></p>
+            <p className="empty-msg">{t('common.noData')} <button onClick={() => onNavigate('accounts')}>{t('accounts.add')}</button></p>
           )}
         </section>
       </div>

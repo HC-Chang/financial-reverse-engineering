@@ -1,7 +1,9 @@
 import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Transaction } from '../../types/financial';
 import { formatCurrency } from '../../utils/formatters';
 import { startOfMonth, format, subMonths, isSameMonth, parseISO } from 'date-fns';
+import { enUS, zhTW } from 'date-fns/locale';
 
 interface SpendingTrendsProps {
   transactions: Transaction[];
@@ -9,13 +11,16 @@ interface SpendingTrendsProps {
 }
 
 const SpendingTrends: React.FC<SpendingTrendsProps> = ({ transactions, months = 6 }) => {
+  const { i18n } = useTranslation();
+  const dateLocale = i18n.language === 'zh-TW' ? zhTW : enUS;
+
   const data = useMemo(() => {
     const now = new Date();
     const result = [];
 
     for (let i = months - 1; i >= 0; i--) {
       const monthDate = startOfMonth(subMonths(now, i));
-      const monthLabel = format(monthDate, 'MMM');
+      const monthLabel = format(monthDate, 'MMM', { locale: dateLocale });
       const monthKey = format(monthDate, 'yyyy-MM');
       
       const monthTransactions = transactions.filter(t => 
@@ -39,7 +44,7 @@ const SpendingTrends: React.FC<SpendingTrendsProps> = ({ transactions, months = 
     }
 
     return result;
-  }, [transactions, months]);
+  }, [transactions, months, dateLocale]);
 
   const maxTotal = Math.max(...data.map(d => d.total), 100);
   const chartHeight = 150;

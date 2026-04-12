@@ -62,7 +62,7 @@ const MonteCarloView: React.FC = () => {
     return points.map(p => ({ x: p.month, y: p.balance, label: p.date }));
   }, [selectedEra, settings, totalBalance]);
 
-  if (!results) return <div className="monte-carlo-container">Loading simulations...</div>;
+  if (!results) return <div className="monte-carlo-container">{t('common.loading')}</div>;
 
   const getHistoricalEvent = (dateStr: string) => {
     const year = dateStr.split('-')[0];
@@ -82,26 +82,26 @@ const MonteCarloView: React.FC = () => {
             <div className="gauge-value">{results.resilienceScore.toFixed(1)}%</div>
             <div className="gauge-label">{t('monteCarlo.scoreLabel')}</div>
           </div>
-          <p>Your plan survived {results.successCount} out of {results.totalSimulations} historical starts.</p>
+          <p>{t('monteCarlo.survived', { count: results.successCount, total: results.totalSimulations })}</p>
         </section>
 
         <section className="resilience-range-card card">
           <h3>{t('monteCarlo.distribution')}</h3>
-          <p>Final balances adjusted for historical inflation.</p>
+          <p>{t('monteCarlo.finalBalances')}</p>
           <div className="range-visual">
             <div className="range-bar-container">
               <div className="range-bar">
                 <div className="marker median" style={{ left: `${Math.min(100, (results.medianBalance / results.bestCases[0].finalBalance) * 100)}%` }}>
-                  <span className="marker-label">Median: {formatCurrency(results.medianBalance)}</span>
+                  <span className="marker-label">{t('monteCarlo.median')}: {formatCurrency(results.medianBalance)}</span>
                 </div>
                 <div className="marker goal" style={{ left: `${Math.min(100, (targetNetWorth / results.bestCases[0].finalBalance) * 100)}%` }}>
-                  <span className="marker-label">Goal: {formatCurrency(targetNetWorth)}</span>
+                  <span className="marker-label">{t('dashboard.goal')}: {formatCurrency(targetNetWorth)}</span>
                 </div>
               </div>
             </div>
             <div className="range-extremes">
-              <span>Worst: {formatCurrency(results.worstCases[0]?.finalBalance || 0)}</span>
-              <span>Best: {formatCurrency(results.bestCases[0]?.finalBalance || 0)}</span>
+              <span>{t('monteCarlo.worst')}: {formatCurrency(results.worstCases[0]?.finalBalance || 0)}</span>
+              <span>{t('monteCarlo.best')}: {formatCurrency(results.bestCases[0]?.finalBalance || 0)}</span>
             </div>
           </div>
           <p className="hint">Shows your median path vs. the "Finish Line" across all historical simulations.</p>
@@ -128,23 +128,23 @@ const MonteCarloView: React.FC = () => {
           <h3>{t('monteCarlo.stressGap')}</h3>
           {stressGap > 0 ? (
             <>
-              <p>To reach <strong>100% historical resilience</strong> (surviving 1929), choose one:</p>
+              <p dangerouslySetInnerHTML={{ __html: t('monteCarlo.survive1929') }}></p>
               <div className="gap-options">
                 <div className="gap-option">
                   <div className="gap-value">+{formatCurrency(stressGap)}/mo</div>
-                  <p className="hint">Extra investment needed.</p>
+                  <p className="hint">{t('monteCarlo.extraInvestment')}</p>
                 </div>
                 <div className="gap-divider">OR</div>
                 <div className="gap-option">
                   <div className="gap-value">+{Math.ceil(stressDelay / 12 * 10) / 10} yrs</div>
-                  <p className="hint">Delay your target date.</p>
+                  <p className="hint">{t('monteCarlo.delayDate')}</p>
                 </div>
               </div>
             </>
           ) : (
             <>
               <p>Your current plan has <strong>100% historical resilience</strong>.</p>
-              <div className="gap-value success">Bulletproof</div>
+              <div className="gap-value success">{t('monteCarlo.bulletproof')}</div>
               <p className="hint">Your "Monthly Fuel" is sufficient to survive all historical market crashes since 1926.</p>
             </>
           )}

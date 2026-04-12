@@ -10,6 +10,20 @@
     "csv": "CSV 匯入",
     "settings": "設定"
   },
+  "common": {
+    "loading": "載入中...",
+    "save": "儲存",
+    "cancel": "取消",
+    "delete": "刪除",
+    "confirm": "確認",
+    "dismiss": "忽略",
+    "sync": "同步",
+    "import": "匯入",
+    "export": "匯出",
+    "noData": "尚無資料",
+    "actions": "操作",
+    "loggedInAs": "目前登入者：{{name}}"
+  },
   "dashboard": {
     "title": "財務概覽",
     "subtitle": "您的財務自由之路已規劃完成。",
@@ -29,7 +43,10 @@
     "leakHint": "每月重複性支出",
     "ahead": "領先",
     "lagging": "落後",
-    "onTrack": "符合預期"
+    "onTrack": "符合預期",
+    "newSubsAlert": "偵測到 {{count}} 個新的潛在訂閱項目。",
+    "reviewLeaks": "請在「訂閱審核」中查看並優化支出。",
+    "viewAudit": "前往審核 →"
   },
   "monteCarlo": {
     "title": "歷史抗壓測試",
@@ -38,12 +55,117 @@
     "distribution": "結果分佈",
     "stressGap": "抗壓缺口",
     "worstStarts": "最糟的開始日期",
-    "bestStarts": "最佳的開始日期"
+    "bestStarts": "最佳的開始日期",
+    "survived": "您的計劃在 {{total}} 個歷史週期中成功生存了 {{count}} 個。",
+    "finalBalances": "最終餘額已根據歷史通膨進行調整。",
+    "median": "中位數",
+    "worst": "最差",
+    "best": "最佳",
+    "bulletproof": "堅不可摧",
+    "extraInvestment": "需要的額外投資。",
+    "delayDate": "延遲您的目標日期。",
+    "survive1929": "要達到 100% 的歷史抗壓能力（在 1929 年生存），請選擇一個方案："
+  },
+  "accounts": {
+    "title": "財務帳戶",
+    "subtitle": "管理您不同類別的資產。",
+    "addNew": "新增帳戶",
+    "yourAccounts": "您的帳戶",
+    "name": "帳戶名稱",
+    "balance": "目前餘額",
+    "type": "帳戶類型",
+    "types": {
+      "Cash": "現金",
+      "Taxable": "應稅經紀帳戶",
+      "Roth": "Roth IRA/401k",
+      "Traditional": "傳統 IRA/401k"
+    },
+    "add": "新增帳戶",
+    "discrepancy": "金額不符！交易總額：{{amount}}"
+  },
+  "transactions": {
+    "title": "交易紀錄",
+    "subtitle": "追蹤您的支出與收入紀錄。",
+    "description": "描述",
+    "amount": "金額",
+    "category": "類別",
+    "date": "日期",
+    "searchPlaceholder": "搜尋交易...",
+    "filterAccount": "所有帳戶",
+    "filterCategory": "所有類別"
+  },
+  "rebalance": {
+    "title": "資產再平衡",
+    "subtitle": "將目前的配置與您的長期策略對齊。",
+    "currentVsTarget": "目前 vs 目標",
+    "suggestions": "引擎建議",
+    "drift": "偏離",
+    "target": "目標 %",
+    "buy": "買入",
+    "sell": "賣出",
+    "reset": "重設為預設值",
+    "warningSum": "警告：您的目標總和為 {{total}}%，而非 100%。"
+  },
+  "tax": {
+    "title": "稅務策略與優化",
+    "subtitle": "透過引擎優化的投入，將終身稅務負擔降至最低。",
+    "effectiveRate": "退休預計有效稅率",
+    "estimatedAnnual": "預計年度稅額",
+    "waterfall": "投入優先順序",
+    "insights": "優化見解",
+    "steps": {
+      "match": { "name": "雇主提撥額度", "desc": "立即獲得 100% 的投資報酬率。絕對不要錯過。" },
+      "rothHsa": { "name": "Roth IRA / HSA", "desc": "免稅成長。最適合長期複利增值。" },
+      "trad": { "name": "傳統型 401k/IRA", "desc": "降低當前應稅收入。若目前稅率高於退休稅率則優先考慮。" },
+      "taxable": { "name": "一般應稅經紀帳戶", "desc": "最大程度的靈活性。需繳納資本利得稅。" }
+    }
+  },
+  "subscriptions": {
+    "title": "訂閱優化",
+    "subtitle": "堵住漏洞並優化您的每月現金流。",
+    "impact": "對自由日數的影響",
+    "detected": "偵測到的訂閱項目",
+    "confirmed": "已確認的訂閱項目",
+    "plugLeaks": "省下這筆支出將為您爭取 {{days}} 天的自由。",
+    "annualImpact": "年度影響：{{amount}}"
+  },
+  "csv": {
+    "title": "CSV 匯入工具",
+    "subtitle": "匯入銀行對帳單，為引擎提供真實數據。",
+    "targetAccount": "目標帳戶",
+    "selectFile": "選擇 CSV 檔案",
+    "mapping": "欄位對應設定",
+    "preview": "數據預覽（前 3 列）",
+    "start": "開始匯入"
   },
   "settings": {
     "title": "設定",
+    "subtitle": "設定您的引擎參數與數據隱私。",
+    "engineConfig": "引擎配置",
     "language": "語言",
     "en": "English",
-    "zhTW": "繁體中文 (Traditional Chinese)"
+    "zhTW": "繁體中文 (Traditional Chinese)",
+    "targetIncome": "目標每月收入",
+    "targetDate": "目標自由日期",
+    "annualReturn": "年化報酬率 (%)",
+    "withdrawalRate": "提領率 (%)",
+    "dataManagement": "數據管理",
+    "exportBackup": "匯出備份",
+    "dangerZone": "危險區域",
+    "clearAll": "清除所有數據",
+    "success": "設定已成功儲存！"
+  },
+  "onboarding": {
+    "title": "歡迎使用財務引擎",
+    "subtitle": "讓我們逆向規劃您的財務自由之路。",
+    "incomeGoal": "每月收入目標",
+    "incomeHelp": "退休後每月需要多少生活費？",
+    "currentAssets": "初始可投資資產",
+    "assetsHelp": "您目前擁有的現金與投資總額。",
+    "targetDate": "目標自由日期",
+    "dateHelp": "您理想中何時想停止工作？",
+    "mathParameters": "數學參數",
+    "mathHelp": "已提供保守的預設值，若有特定策略可進行調整。",
+    "start": "啟動引擎"
   }
 }

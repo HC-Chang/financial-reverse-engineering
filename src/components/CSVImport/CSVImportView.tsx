@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
+import { useTranslation } from 'react-i18next';
 import { db } from '../../db/database';
 import { parseCSV, autoDetectMapping, CSVMapping, generateTransactionHash } from '../../logic/csvMapper';
 import './CSVImportView.css';
 
 const CSVImportView: React.FC = () => {
+  const { t } = useTranslation();
   const accounts = useLiveQuery(() => db.accounts.toArray(), []);
   
   const [selectedAccountId, setSelectedAccountId] = useState<number | ''>('');
@@ -32,7 +34,7 @@ const CSVImportView: React.FC = () => {
   const handleImport = async () => {
     if (!csvData || !mapping || !selectedAccountId) return;
 
-    setImportStatus('Importing...');
+    setImportStatus(t('common.importing') || 'Importing...');
     const transactions = csvData.slice(1); // Skip header
     let addedCount = 0;
     let duplicateCount = 0;
@@ -74,13 +76,13 @@ const CSVImportView: React.FC = () => {
   return (
     <div className="csv-import-container">
       <header className="csv-header">
-        <h1>CSV Import Mapper</h1>
-        <p>Import your bank statements to keep the engine fueled with real data.</p>
+        <h1>{t('csv.title')}</h1>
+        <p>{t('csv.subtitle')}</p>
       </header>
 
       <div className="import-card">
         <div className="form-group">
-          <label>Target Account</label>
+          <label>{t('csv.targetAccount')}</label>
           <select 
             value={selectedAccountId} 
             onChange={(e) => setSelectedAccountId(Number(e.target.value))}
@@ -94,17 +96,17 @@ const CSVImportView: React.FC = () => {
         </div>
 
         <div className="form-group">
-          <label>Select CSV File</label>
+          <label>{t('csv.selectFile')}</label>
           <input type="file" accept=".csv" onChange={handleFileUpload} disabled={!selectedAccountId} />
         </div>
 
         {csvData && mapping && (
           <div className="mapping-preview">
-            <h3>Mapping Configuration</h3>
+            <h3>{t('csv.mapping')}</h3>
             <p>Verify that the columns match your CSV structure:</p>
             <div className="mapping-grid">
               <div className="mapping-item">
-                <label>Date Column</label>
+                <label>{t('transactions.date')}</label>
                 <select 
                   value={mapping.dateIndex} 
                   onChange={(e) => setMapping({...mapping, dateIndex: Number(e.target.value)})}
@@ -113,7 +115,7 @@ const CSVImportView: React.FC = () => {
                 </select>
               </div>
               <div className="mapping-item">
-                <label>Amount Column</label>
+                <label>{t('transactions.amount')}</label>
                 <select 
                   value={mapping.amountIndex} 
                   onChange={(e) => setMapping({...mapping, amountIndex: Number(e.target.value)})}
@@ -122,7 +124,7 @@ const CSVImportView: React.FC = () => {
                 </select>
               </div>
               <div className="mapping-item">
-                <label>Description Column</label>
+                <label>{t('transactions.description')}</label>
                 <select 
                   value={mapping.descriptionIndex} 
                   onChange={(e) => setMapping({...mapping, descriptionIndex: Number(e.target.value)})}
@@ -133,13 +135,13 @@ const CSVImportView: React.FC = () => {
             </div>
 
             <div className="preview-table-wrapper">
-              <h4>Data Preview (First 3 rows)</h4>
+              <h4>{t('csv.preview')}</h4>
               <table className="preview-table">
                 <thead>
                   <tr>
-                    <th>Date</th>
-                    <th>Description</th>
-                    <th>Amount</th>
+                    <th>{t('transactions.date')}</th>
+                    <th>{t('transactions.description')}</th>
+                    <th>{t('transactions.amount')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -154,7 +156,7 @@ const CSVImportView: React.FC = () => {
               </table>
             </div>
 
-            <button onClick={handleImport} className="import-button">Start Import</button>
+            <button onClick={handleImport} className="import-button">{t('csv.start')}</button>
           </div>
         )}
 

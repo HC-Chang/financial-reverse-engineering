@@ -26,7 +26,7 @@ const SettingsView: React.FC = () => {
       withdrawalRate: parseFloat(formData.withdrawalRate),
       targetDate: new Date(formData.targetDate).toISOString(),
     });
-    setSaveStatus('Settings saved successfully!');
+    setSaveStatus(t('settings.success'));
     setTimeout(() => setSaveStatus(''), 3000);
   };
 
@@ -64,15 +64,15 @@ const SettingsView: React.FC = () => {
     <div className="settings-container">
       <header className="settings-header">
         <h1>{t('settings.title')}</h1>
-        <p>Configure your engine parameters and data privacy.</p>
+        <p>{t('settings.subtitle')}</p>
       </header>
 
       <div className="settings-grid">
         <section className="settings-form-section card">
-          <h3>Engine Configuration</h3>
+          <h3>{t('settings.engineConfig')}</h3>
           <form onSubmit={handleSave} className="settings-form">
             <div className="form-group">
-              <label>Target Monthly Income</label>
+              <label>{t('settings.targetIncome')}</label>
               <input 
                 type="number" 
                 value={formData.targetMonthlyIncome}
@@ -80,7 +80,7 @@ const SettingsView: React.FC = () => {
               />
             </div>
             <div className="form-group">
-              <label>Target Freedom Date</label>
+              <label>{t('settings.targetDate')}</label>
               <input 
                 type="date" 
                 value={formData.targetDate}
@@ -89,7 +89,7 @@ const SettingsView: React.FC = () => {
             </div>
             <div className="form-row">
               <div className="form-group">
-                <label>Annual Return (%)</label>
+                <label>{t('settings.annualReturn')}</label>
                 <input 
                   type="number" 
                   step="0.1"
@@ -98,7 +98,7 @@ const SettingsView: React.FC = () => {
                 />
               </div>
               <div className="form-group">
-                <label>Withdrawal Rate (%)</label>
+                <label>{t('settings.withdrawalRate')}</label>
                 <input 
                   type="number" 
                   step="0.1"
@@ -107,7 +107,7 @@ const SettingsView: React.FC = () => {
                 />
               </div>
             </div>
-            <button type="submit" className="save-button">Save Changes</button>
+            <button type="submit" className="save-button">{t('common.save')}</button>
             {saveStatus && <p className="status-msg success">{saveStatus}</p>}
           </form>
         </section>
@@ -134,17 +134,17 @@ const SettingsView: React.FC = () => {
           </div>
 
           <div className="card">
-            <h3>Data Management</h3>
+            <h3>{t('settings.dataManagement')}</h3>
             <div className="management-actions">
               <div className="action-item">
                 <p>Download a local backup of all your data as a JSON file.</p>
-                <button onClick={handleExport} className="secondary-button">Export Backup</button>
+                <button onClick={handleExport} className="secondary-button">{t('settings.exportBackup')}</button>
               </div>
               
               <div className="danger-zone">
-                <h4>Danger Zone</h4>
+                <h4>{t('settings.dangerZone')}</h4>
                 <p>This will permanently erase all data stored in this browser.</p>
-                <button onClick={handleClearData} className="danger-button">Clear All Data</button>
+                <button onClick={handleClearData} className="danger-button">{t('settings.clearAll')}</button>
               </div>
             </div>
           </div>

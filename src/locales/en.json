@@ -10,6 +10,20 @@
     "csv": "CSV Import",
     "settings": "Settings"
   },
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "dismiss": "Dismiss",
+    "sync": "Sync",
+    "import": "Import",
+    "export": "Export",
+    "noData": "No data yet.",
+    "actions": "Actions",
+    "loggedInAs": "Logged in as {{name}}"
+  },
   "dashboard": {
     "title": "Financial Overview",
     "subtitle": "Your path to freedom is mapped out.",
@@ -29,7 +43,10 @@
     "leakHint": "Monthly recurring expenses",
     "ahead": "Ahead",
     "lagging": "Lagging",
-    "onTrack": "On Track"
+    "onTrack": "On Track",
+    "newSubsAlert": "{{count}} New Potential Subscriptions Detected.",
+    "reviewLeaks": "Review these in the Subscription Audit to plug leaks.",
+    "viewAudit": "View Audit →"
   },
   "monteCarlo": {
     "title": "Historical Resilience",
@@ -38,12 +55,117 @@
     "distribution": "Outcome Distribution",
     "stressGap": "The Stress Gap",
     "worstStarts": "Unluckiest Start Dates",
-    "bestStarts": "Luckiest Start Dates"
+    "bestStarts": "Luckiest Start Dates",
+    "survived": "Your plan survived {{count}} out of {{total}} historical starts.",
+    "finalBalances": "Final balances adjusted for historical inflation.",
+    "median": "Median",
+    "worst": "Worst",
+    "best": "Best",
+    "bulletproof": "Bulletproof",
+    "extraInvestment": "Extra investment needed.",
+    "delayDate": "Delay your target date.",
+    "survive1929": "To reach 100% historical resilience (surviving 1929), choose one:"
+  },
+  "accounts": {
+    "title": "Financial Accounts",
+    "subtitle": "Manage your assets across different categories.",
+    "addNew": "Add New Account",
+    "yourAccounts": "Your Accounts",
+    "name": "Account Name",
+    "balance": "Current Balance",
+    "type": "Account Type",
+    "types": {
+      "Cash": "Cash",
+      "Taxable": "Taxable Brokerage",
+      "Roth": "Roth IRA/401k",
+      "Traditional": "Traditional IRA/401k"
+    },
+    "add": "Add Account",
+    "discrepancy": "Discrepancy! Transaction sum: {{amount}}"
+  },
+  "transactions": {
+    "title": "Transactions",
+    "subtitle": "Track your spending and income history.",
+    "description": "Description",
+    "amount": "Amount",
+    "category": "Category",
+    "date": "Date",
+    "searchPlaceholder": "Search transactions...",
+    "filterAccount": "All Accounts",
+    "filterCategory": "All Categories"
+  },
+  "rebalance": {
+    "title": "Asset Rebalancing",
+    "subtitle": "Align your current allocation with your long-term strategy.",
+    "currentVsTarget": "Current vs. Target",
+    "suggestions": "Engine Suggestions",
+    "drift": "Drift",
+    "target": "Target %",
+    "buy": "BUY",
+    "sell": "SELL",
+    "reset": "Reset to Default",
+    "warningSum": "Warning: Your targets sum to {{total}}%, not 100%."
+  },
+  "tax": {
+    "title": "Tax Strategy & Optimization",
+    "subtitle": "Minimize your lifetime tax liability with engine-optimized contributions.",
+    "effectiveRate": "Retirement Effective Rate",
+    "estimatedAnnual": "Estimated Annual Tax",
+    "waterfall": "Contribution Waterfall",
+    "insights": "Optimization Insights",
+    "steps": {
+      "match": { "name": "Employer Match", "desc": "Immediate 100% ROI. Never leave this on the table." },
+      "rothHsa": { "name": "Roth IRA / HSA", "desc": "Tax-free growth. Best for long-term compounding." },
+      "trad": { "name": "Traditional 401k/IRA", "desc": "Lower current taxable income. Good if current tax > retirement tax." },
+      "taxable": { "name": "Taxable Brokerage", "desc": "Maximum flexibility. Subject to capital gains tax." }
+    }
+  },
+  "subscriptions": {
+    "title": "Subscription Optimization",
+    "subtitle": "Plug leaks and optimize your monthly cash flow.",
+    "impact": "Impact on Days to Freedom",
+    "detected": "Detected Subscriptions",
+    "confirmed": "Confirmed Subscriptions",
+    "plugLeaks": "Plugging this leak would buy you {{days}} days of freedom.",
+    "annualImpact": "Annual Impact: {{amount}}"
+  },
+  "csv": {
+    "title": "CSV Import Mapper",
+    "subtitle": "Import your bank statements to keep the engine fueled with real data.",
+    "targetAccount": "Target Account",
+    "selectFile": "Select CSV File",
+    "mapping": "Mapping Configuration",
+    "preview": "Data Preview (First 3 rows)",
+    "start": "Start Import"
   },
   "settings": {
     "title": "Settings",
+    "subtitle": "Configure your engine parameters and data privacy.",
+    "engineConfig": "Engine Configuration",
     "language": "Language",
     "en": "English",
-    "zhTW": "Traditional Chinese (繁體中文)"
+    "zhTW": "Traditional Chinese (繁體中文)",
+    "targetIncome": "Target Monthly Income",
+    "targetDate": "Target Freedom Date",
+    "annualReturn": "Annual Return (%)",
+    "withdrawalRate": "Withdrawal Rate (%)",
+    "dataManagement": "Data Management",
+    "exportBackup": "Export Backup",
+    "dangerZone": "Danger Zone",
+    "clearAll": "Clear All Data",
+    "success": "Settings saved successfully!"
+  },
+  "onboarding": {
+    "title": "Welcome to Financial Engine",
+    "subtitle": "Let's reverse-engineer your path to financial freedom.",
+    "incomeGoal": "Monthly Income Goal",
+    "incomeHelp": "How much do you need per month in retirement?",
+    "currentAssets": "Initial Investable Assets",
+    "assetsHelp": "Total cash and investments you have today.",
+    "targetDate": "Target Freedom Date",
+    "dateHelp": "When would you ideally like to stop working?",
+    "mathParameters": "Mathematical Parameters",
+    "mathHelp": "Conservative defaults are provided. Adjust if you have a specific strategy.",
+    "start": "Start Engine"
   }
 }

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSettings } from '../../context/SettingsContext';
 import './OnboardingView.css';
 
 const OnboardingView: React.FC = () => {
+  const { t } = useTranslation();
   const { updateSettings } = useSettings();
-  
   const [formData, setFormData] = useState({
     targetMonthlyIncome: '',
     initialAssets: '',
@@ -13,56 +14,33 @@ const OnboardingView: React.FC = () => {
     targetDate: new Date().toISOString().split('T')[0],
   });
 
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    
-    // Clear error when field is edited
-    if (errors[name]) {
-      setErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors[name];
-        return newErrors;
-      });
-    }
-  };
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const validate = () => {
-    const newErrors: { [key: string]: string } = {};
-    
+    const newErrors: Record<string, string> = {};
     if (!formData.targetMonthlyIncome || parseFloat(formData.targetMonthlyIncome) <= 0) {
-      newErrors.targetMonthlyIncome = 'Please enter a valid monthly target.';
+      newErrors.targetMonthlyIncome = 'Please enter a valid monthly income goal.';
     }
-    
     if (!formData.initialAssets || parseFloat(formData.initialAssets) < 0) {
-      newErrors.initialAssets = 'Initial assets cannot be negative.';
+      newErrors.initialAssets = 'Please enter valid initial assets.';
+    }
+    const annualReturn = parseFloat(formData.annualReturn);
+    if (isNaN(annualReturn) || annualReturn < 0 || annualReturn > 20) {
+      newErrors.annualReturn = 'Please enter a realistic return rate (0-20%).';
+    }
+    const withdrawalRate = parseFloat(formData.withdrawalRate);
+    if (isNaN(withdrawalRate) || withdrawalRate < 1 || withdrawalRate > 10) {
+      newErrors.withdrawalRate = 'Safe withdrawal rates are typically between 2-6%.';
     }
     
-    const annualReturn = parseFloat(formData.annualReturn);
-    if (isNaN(annualReturn)) {
-      newErrors.annualReturn = 'Please enter a valid annual return.';
-    }
-
-    const withdrawalRate = parseFloat(formData.withdrawalRate);
-    if (isNaN(withdrawalRate) || withdrawalRate <= 0) {
-      newErrors.withdrawalRate = 'Withdrawal rate must be greater than 0.';
-    }
-
-    if (!formData.targetDate) {
-      newErrors.targetDate = 'Please select a target date.';
-    }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (validate()) {
-      await updateSettings({
+      updateSettings({
         targetMonthlyIncome: parseFloat(formData.targetMonthlyIncome),
         initialAssets: parseFloat(formData.initialAssets),
         annualReturn: parseFloat(formData.annualReturn),
@@ -76,19 +54,17 @@ const OnboardingView: React.FC = () => {
   return (
     <div className="onboarding-container">
       <div className="onboarding-card">
-        <h1>Welcome</h1>
-        <p>Let's map out your financial finish line. Enter your parameters to see the engine in action.</p>
-        
-        <form className="onboarding-form" onSubmit={handleSubmit}>
+        <h1>{t('onboarding.title')}</h1>
+        <p>{t('onboarding.subtitle')}</p>
+
+        <form onSubmit={handleSubmit} className="onboarding-form">
           <div className="form-group">
-            <label htmlFor="targetMonthlyIncome">Your Monthly Target (Spending)</label>
-            <p className="form-help">How much you want to spend each month in today's dollars.</p>
+            <label>{t('onboarding.incomeGoal')}</label>
+            <span className="form-help">{t('onboarding.incomeHelp')}</span>
             <input
               type="number"
-              id="targetMonthlyIncome"
-              name="targetMonthlyIncome"
               value={formData.targetMonthlyIncome}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, targetMonthlyIncome: e.target.value })}
               placeholder="e.g. 5000"
               required
             />
@@ -96,14 +72,12 @@ const OnboardingView: React.FC = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="initialAssets">Initial Investable Assets</label>
-            <p className="form-help">Total current value of your stocks, bonds, and cash.</p>
+            <label>{t('onboarding.currentAssets')}</label>
+            <span className="form-help">{t('onboarding.assetsHelp')}</span>
             <input
               type="number"
-              id="initialAssets"
-              name="initialAssets"
               value={formData.initialAssets}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, initialAssets: e.target.value })}
               placeholder="e.g. 50000"
               required
             />
@@ -111,52 +85,45 @@ const OnboardingView: React.FC = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="annualReturn">Expected Annual Return (%)</label>
-            <p className="form-help">Projected long-term growth (Inflation-adjusted). S&P 500 average is ~7%.</p>
-            <input
-              type="number"
-              id="annualReturn"
-              name="annualReturn"
-              value={formData.annualReturn}
-              onChange={handleChange}
-              step="0.1"
-              required
-            />
-            {errors.annualReturn && <span className="error-message">{errors.annualReturn}</span>}
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="withdrawalRate">Withdrawal Strategy (%)</label>
-            <p className="form-help">The percentage of assets you'll spend annually (e.g. the 4% rule).</p>
-            <input
-              type="number"
-              id="withdrawalRate"
-              name="withdrawalRate"
-              value={formData.withdrawalRate}
-              onChange={handleChange}
-              step="0.1"
-              required
-            />
-            {errors.withdrawalRate && <span className="error-message">{errors.withdrawalRate}</span>}
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="targetDate">The Finish Line</label>
-            <p className="form-help">When do you want to be financially free?</p>
+            <label>{t('onboarding.targetDate')}</label>
+            <span className="form-help">{t('onboarding.dateHelp')}</span>
             <input
               type="date"
-              id="targetDate"
-              name="targetDate"
               value={formData.targetDate}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, targetDate: e.target.value })}
               required
             />
-            {errors.targetDate && <span className="error-message">{errors.targetDate}</span>}
           </div>
 
-          <button type="submit" className="onboarding-button">
-            Calculate My Freedom
-          </button>
+          <div className="math-parameters">
+            <h3>{t('onboarding.mathParameters')}</h3>
+            <p className="form-help">{t('onboarding.mathHelp')}</p>
+            
+            <div className="form-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div className="form-group">
+                <label>{t('settings.annualReturn')}</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  value={formData.annualReturn}
+                  onChange={(e) => setFormData({ ...formData, annualReturn: e.target.value })}
+                />
+                {errors.annualReturn && <span className="error-message">{errors.annualReturn}</span>}
+              </div>
+              <div className="form-group">
+                <label>{t('settings.withdrawalRate')}</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  value={formData.withdrawalRate}
+                  onChange={(e) => setFormData({ ...formData, withdrawalRate: e.target.value })}
+                />
+                {errors.withdrawalRate && <span className="error-message">{errors.withdrawalRate}</span>}
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" className="onboarding-button">{t('onboarding.start')}</button>
         </form>
       </div>
     </div>

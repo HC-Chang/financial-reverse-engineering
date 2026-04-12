@@ -104,10 +104,10 @@ export const calculateTaxStrategy = (settings: FinancialSettings) => {
     effectiveRate,
     estimatedAnnualTax: estimatedTax,
     contributionWaterfall: [
-      { priority: 1, name: 'Employer Match', description: 'Immediate 100% ROI. Never leave this on the table.', icon: '🤝' },
-      { priority: 2, name: 'Roth IRA / HSA', description: 'Tax-free growth. Best for long-term compounding.', icon: '🛡️' },
-      { priority: 3, name: 'Traditional 401k/IRA', description: 'Lower current taxable income. Good if current tax > retirement tax.', icon: '📉' },
-      { priority: 4, name: 'Taxable Brokerage', description: 'Maximum flexibility. Subject to capital gains tax.', icon: '📈' }
+      { priority: 1, nameKey: 'tax.steps.match', icon: '🤝' },
+      { priority: 2, nameKey: 'tax.steps.rothHsa', icon: '🛡️' },
+      { priority: 3, nameKey: 'tax.steps.trad', icon: '📉' },
+      { priority: 4, nameKey: 'tax.steps.taxable', icon: '📈' }
     ]
   };
 };

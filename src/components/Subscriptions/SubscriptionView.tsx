@@ -1,172 +1,173 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
+import { useTranslation } from 'react-i18next';
 import { db } from '../../db/database';
 import { useSettings } from '../../context/SettingsContext';
-import { detectSubscriptions, calculateRequiredFuel, calculateMonthsToGoal } from '../../logic/engine';
+import { detectSubscriptions, calculateRequiredFuel } from '../../logic/engine';
 import { formatCurrency } from '../../utils/formatters';
-import { Subscription } from '../../types/financial';
 import './SubscriptionView.css';
 
 const SubscriptionView: React.FC = () => {
+  const { t } = useTranslation();
   const { settings } = useSettings();
   const transactions = useLiveQuery(() => db.transactions.toArray(), []);
-  const confirmedSubs = useLiveQuery(() => db.subscriptions.toArray(), []);
+  const confirmedSubscriptions = useLiveQuery(() => db.subscriptions.toArray(), []);
 
-  // Detect new ones and sync with DB
+  // Use useEffect to run detection and save to DB
   useEffect(() => {
-    if (!transactions) return;
-    
-    const detected = detectSubscriptions(transactions);
-    
-    detected.forEach(async (sub) => {
-      const existing = confirmedSubs?.find(s => s.description === sub.description);
-      if (!existing) {
-        await db.subscriptions.add({
-          description: sub.description,
-          monthlyAmount: sub.monthlyAmount,
-          frequency: sub.frequency,
-          status: 'Detected',
-          lastDate: sub.lastDate,
-          category: sub.category,
-          confidence: sub.confidence,
-          count: sub.count
-        });
+    const runDetection = async () => {
+      if (!transactions || transactions.length === 0) return;
+      
+      const detected = detectSubscriptions(transactions);
+      
+      for (const sub of detected) {
+        const existing = await db.subscriptions
+          .where('description')
+          .equals(sub.description)
+          .first();
+          
+        if (!existing) {
+          await db.subscriptions.add(sub);
+        } else if (existing.status === 'Detected') {
+          // Update count/lastDate if still in detected state
+          await db.subscriptions.update(existing.id!, {
+            count: sub.count,
+            lastDate: sub.lastDate,
+            monthlyAmount: sub.monthlyAmount
+          });
+        }
       }
-    });
-  }, [transactions, confirmedSubs]);
-
-  const activeSubs = confirmedSubs?.filter(s => s.status === 'Confirmed') || [];
-  const pendingSubs = confirmedSubs?.filter(s => s.status === 'Detected') || [];
-
-  const totalMonthlyLeak = useMemo(() => {
-    return activeSubs.reduce((sum, s) => sum + s.monthlyAmount, 0);
-  }, [activeSubs]);
-
-  const freedomImpact = useMemo(() => {
-    if (!settings || totalMonthlyLeak === 0) return null;
-    
-    const results = calculateRequiredFuel(settings);
-    const { monthlyFuel, netWorthGoal } = results;
-    const { initialAssets, annualReturn } = settings;
-
-    const baseMonths = calculateMonthsToGoal(initialAssets, monthlyFuel, netWorthGoal, annualReturn);
-    const optimizedMonths = calculateMonthsToGoal(initialAssets, monthlyFuel + totalMonthlyLeak, netWorthGoal, annualReturn);
-    
-    const monthsSaved = baseMonths - optimizedMonths;
-    const daysSaved = Math.round(monthsSaved * 30.437); // Average days in month
-
-    return {
-      monthsSaved: Math.round(monthsSaved * 10) / 10,
-      daysSaved
     };
-  }, [settings, totalMonthlyLeak]);
+    
+    runDetection();
+  }, [transactions]);
 
-  const handleStatusChange = async (id: number, status: 'Confirmed' | 'Dismissed') => {
-    await db.subscriptions.update(id, { status });
+  const pendingSubscriptions = useMemo(() => {
+    return confirmedSubscriptions?.filter(s => s.status === 'Detected') || [];
+  }, [confirmedSubscriptions]);
+
+  const activeSubscriptions = useMemo(() => {
+    return confirmedSubscriptions?.filter(s => s.status === 'Confirmed') || [];
+  }, [confirmedSubscriptions]);
+
+  // Calculate "Days to Freedom" impact of a subscription
+  const calculateImpact = (monthlyAmount: number) => {
+    if (!settings) return 0;
+    const currentResults = calculateRequiredFuel(settings);
+    
+    // Calculate fuel with the subscription "plugged" (removed from expenses)
+    // In our engine, this means the user needs LESS target income
+    const reducedIncome = settings.targetMonthlyIncome - (monthlyAmount);
+    const optimizedResults = calculateRequiredFuel({
+      ...settings,
+      targetMonthlyIncome: reducedIncome
+    });
+
+    return Math.max(0, currentResults.daysToFreedom - optimizedResults.daysToFreedom);
   };
 
-  const handleUndoDismiss = async (id: number) => {
-    await db.subscriptions.update(id, { status: 'Detected' });
+  const totalMonthlyLeak = activeSubscriptions.reduce((sum, s) => sum + s.monthlyAmount, 0);
+  const totalImpact = calculateImpact(totalMonthlyLeak);
+
+  const handleConfirm = async (id: number) => {
+    await db.subscriptions.update(id, { status: 'Confirmed' });
+  };
+
+  const handleDismiss = async (id: number) => {
+    await db.subscriptions.update(id, { status: 'Dismissed' });
+  };
+
+  const handleDelete = async (id: number) => {
+    await db.subscriptions.delete(id);
   };
 
   return (
     <div className="subscriptions-container">
       <header className="subscriptions-header">
-        <h1>Subscription Audit</h1>
-        <p>Identify recurring expenses and plug the leaks in your financial engine.</p>
+        <h1>{t('subscriptions.title')}</h1>
+        <p>{t('subscriptions.subtitle')}</p>
       </header>
 
       <div className="leak-summary-grid">
-        <div className="leak-summary card">
-          <div className="leak-item">
-            <span className="leak-label">Monthly Leak</span>
-            <span className="leak-value">{formatCurrency(totalMonthlyLeak)}</span>
-          </div>
-          <div className="leak-item">
-            <span className="leak-label">Annual Impact</span>
-            <span className="leak-value highlight">{formatCurrency(totalMonthlyLeak * 12)}</span>
+        <div className="stat-card leak-summary">
+          <div className="stat-metric">
+            <span className="stat-label">{t('dashboard.confirmedLeak')}</span>
+            <span className="stat-value" style={{ color: '#e74c3c' }}>{formatCurrency(totalMonthlyLeak)}</span>
+            <p className="hint">{t('dashboard.leakHint')}</p>
           </div>
         </div>
 
-        {freedomImpact && freedomImpact.daysSaved > 0 && (
-          <div className="freedom-impact-card card highlight">
-            <div className="impact-header">
-              <span className="impact-icon">🚀</span>
-              <span className="impact-label">Engine Optimization Gain</span>
-            </div>
-            <div className="impact-value">
-              {freedomImpact.monthsSaved >= 1 
-                ? `${freedomImpact.monthsSaved} Months` 
-                : `${freedomImpact.daysSaved} Days`}
-            </div>
-            <p className="impact-hint">You reach your goal sooner if you redirect these leaks into your "Monthly Fuel".</p>
+        <div className="stat-card freedom-impact-card">
+          <div className="impact-header">
+            <span className="impact-icon">🚀</span>
+            <span className="impact-label">{t('subscriptions.impact')}</span>
           </div>
-        )}
+          <div className="impact-value">+{totalImpact} Days</div>
+          <p className="impact-hint">If you cancelled these subscriptions today.</p>
+        </div>
       </div>
 
-      {pendingSubs.length > 0 && (
-        <div className="subscriptions-list card pending-section">
-          <h3>New Potential Subscriptions Detected</h3>
-          <p className="hint">Confirm these to track their impact on your freedom date.</p>
+      {pendingSubscriptions.length > 0 && (
+        <section className="pending-section card" style={{ marginBottom: '2rem' }}>
+          <h3>{t('subscriptions.detected')} ({pendingSubscriptions.length})</h3>
           <div className="pending-grid">
-            {pendingSubs.map((sub) => (
+            {pendingSubscriptions.map(sub => (
               <div key={sub.id} className="pending-card">
                 <div className="pending-info">
-                  <strong>{sub.description}</strong>
-                  <span>{formatCurrency(sub.monthlyAmount)} / mo ({sub.frequency})</span>
-                  <div className="confidence-meter">
+                  <span className="sub-desc">{sub.description}</span>
+                  <span className="sub-amount">{formatCurrency(sub.monthlyAmount)}/mo</span>
+                  <div className="confidence-meter" title={`Confidence: ${sub.confidence * 100}%`}>
                     <div className="confidence-bar" style={{ width: `${sub.confidence * 100}%` }}></div>
-                    <span className="confidence-label">Confidence: {Math.round(sub.confidence * 100)}%</span>
                   </div>
                 </div>
                 <div className="pending-actions">
-                  <button onClick={() => handleStatusChange(sub.id!, 'Confirmed')} className="confirm-btn">Confirm</button>
-                  <button onClick={() => handleStatusChange(sub.id!, 'Dismissed')} className="dismiss-btn">Dismiss</button>
+                  <button onClick={() => handleConfirm(sub.id!)} className="confirm-btn">{t('common.confirm')}</button>
+                  <button onClick={() => handleDismiss(sub.id!)} className="dismiss-btn">{t('common.dismiss')}</button>
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        </section>
       )}
 
-      <div className="subscriptions-list card">
-        <h3>Confirmed Recurring Expenses</h3>
-        {activeSubs.length > 0 ? (
+      <section className="subscriptions-list card">
+        <h3>{t('subscriptions.confirmed')}</h3>
+        {activeSubscriptions.length > 0 ? (
           <table className="subs-table">
             <thead>
               <tr>
-                <th>Description</th>
-                <th>Monthly Cost</th>
+                <th>{t('transactions.description')}</th>
                 <th>Frequency</th>
-                <th>Last Seen</th>
-                <th>Action</th>
+                <th>{t('transactions.amount')}</th>
+                <th>Last Date</th>
+                <th>{t('common.actions')}</th>
               </tr>
             </thead>
             <tbody>
-              {activeSubs.map((sub) => (
+              {activeSubscriptions.map(sub => (
                 <tr key={sub.id}>
                   <td className="sub-desc">{sub.description}</td>
-                  <td className="sub-amount">{formatCurrency(sub.monthlyAmount)}</td>
                   <td>{sub.frequency}</td>
+                  <td className="sub-amount">{formatCurrency(sub.monthlyAmount)}/mo</td>
                   <td>{new Date(sub.lastDate).toLocaleDateString()}</td>
                   <td>
-                    <button onClick={() => handleStatusChange(sub.id!, 'Dismissed')} className="action-link danger">Remove</button>
+                    <button onClick={() => handleDelete(sub.id!)} className="action-link danger">{t('common.delete')}</button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         ) : (
-          <p className="empty-msg">No confirmed subscriptions yet. Use the "Detected" section above to add them.</p>
+          <p className="empty-msg">{t('common.noData')}</p>
         )}
-      </div>
+      </section>
 
-      <div className="audit-tips card">
-        <h3>Engine Optimization Tips</h3>
+      <div className="audit-tips card" style={{ marginTop: '2rem' }}>
+        <h3>Engine Audit Logic</h3>
         <ul>
-          <li><strong>Consolidate:</strong> Check for overlapping services (e.g., multiple streaming platforms).</li>
-          <li><strong>Audit:</strong> Look for "ghost" subscriptions you no longer use.</li>
-          <li><strong>Annualize:</strong> Always view costs in annual terms to see their true impact on your freedom date.</li>
+          <li><strong>Recurring Signatures:</strong> The engine flags transactions with similar descriptions and amounts that repeat on a fixed interval.</li>
+          <li><strong>Opportunity Cost:</strong> Every $100/mo in subscriptions requires an additional $30,000 in your net worth goal (using the 4% rule).</li>
+          <li><strong>Silent Leaks:</strong> Subscriptions are the biggest "fuel leaks" because they often continue long after their utility has expired.</li>
         </ul>
       </div>
     </div>

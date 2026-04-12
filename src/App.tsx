@@ -18,7 +18,7 @@ const AppContent: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'overview' | 'accounts' | 'csv' | 'rebalance' | 'subscriptions' | 'tax' | 'settings' | 'resilience' | 'transactions'>('overview');
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>{t('common.loading')}</div>;
   }
 
   if (!settings?.isSetupComplete) {
@@ -83,7 +83,7 @@ const AppContent: React.FC = () => {
           </ul>
         </nav>
         <div className="sidebar-footer">
-          <p>Logged in as User</p>
+          <p>{t('common.loggedInAs', { name: 'User' })}</p>
         </div>
       </aside>
 

@@ -1,11 +1,13 @@
 import React, { useMemo, useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
+import { useTranslation } from 'react-i18next';
 import { db } from '../../db/database';
 import { calculateAllocation } from '../../logic/engine';
 import { formatCurrency, formatPercent } from '../../utils/formatters';
 import './RebalanceView.css';
 
 const RebalanceView: React.FC = () => {
+  const { t } = useTranslation();
   const accounts = useLiveQuery(() => db.accounts.toArray(), []);
   
   // Default target allocations
@@ -45,21 +47,21 @@ const RebalanceView: React.FC = () => {
       <header className="rebalance-header">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
-            <h1>Asset Rebalancing</h1>
-            <p>Align your current allocation with your long-term strategy.</p>
+            <h1>{t('rebalance.title')}</h1>
+            <p>{t('rebalance.subtitle')}</p>
           </div>
-          <button onClick={handleReset} className="reset-button">Reset to Default</button>
+          <button onClick={handleReset} className="reset-button">{t('rebalance.reset')}</button>
         </div>
       </header>
 
       {totalAssets === 0 ? (
-        <div className="empty-msg card">Add some accounts with balances to see your allocation.</div>
+        <div className="empty-msg card">{t('accounts.noAccountsAdded')}</div>
       ) : (
         <div className="rebalance-grid">
           <section className="allocation-section card">
-            <h3>Current vs. Target</h3>
+            <h3>{t('rebalance.currentVsTarget')}</h3>
             {targetTotal !== 100 && (
-              <p className="warning-msg">Warning: Your targets sum to {targetTotal}%, not 100%.</p>
+              <p className="warning-msg">{t('rebalance.warningSum', { total: targetTotal })}</p>
             )}
             <div className="allocation-list">
               {allocations.map(alloc => {
@@ -70,14 +72,14 @@ const RebalanceView: React.FC = () => {
                 return (
                   <div key={alloc.type} className="allocation-row">
                     <div className="row-info">
-                      <span className="type-label">{alloc.type}</span>
+                      <span className="type-label">{t(`accounts.types.${alloc.type}`)}</span>
                       <span className="amount-label">{formatCurrency(alloc.total)} ({formatPercent(alloc.percentage)})</span>
                     </div>
                     
                     <div className="progress-container">
                       <div className="progress-labels">
                         <span>Actual</span>
-                        <span>Target</span>
+                        <span>{t('rebalance.target')}</span>
                       </div>
                       <div className="multi-progress">
                         <div className="bar actual-bar" style={{ width: `${alloc.percentage}%` }}></div>
@@ -87,10 +89,10 @@ const RebalanceView: React.FC = () => {
 
                     <div className="drift-info">
                       <span className={`drift-tag ${drift > 2 ? 'over' : drift < -2 ? 'under' : 'neutral'}`}>
-                        Drift: {drift > 0 ? '+' : ''}{drift.toFixed(1)}% ({formatCurrency(driftValue)})
+                        {t('rebalance.drift')}: {drift > 0 ? '+' : ''}{drift.toFixed(1)}% ({formatCurrency(driftValue)})
                       </span>
                       <div className="target-input-group">
-                        <label>Target %</label>
+                        <label>{t('rebalance.target')}</label>
                         <input 
                           type="number" 
                           value={targets[alloc.type]} 
@@ -105,7 +107,7 @@ const RebalanceView: React.FC = () => {
           </section>
 
           <section className="strategy-section card">
-            <h3>Engine Suggestions</h3>
+            <h3>{t('rebalance.suggestions')}</h3>
             <p>To reach your target allocation with your current {formatCurrency(totalAssets)} portfolio:</p>
             <div className="suggestions-list">
               {allocations.map(alloc => {
@@ -117,7 +119,7 @@ const RebalanceView: React.FC = () => {
 
                 return (
                   <div key={alloc.type} className={`suggestion-item ${drift > 0 ? 'sell' : 'buy'}`}>
-                    <strong>{drift > 0 ? 'SELL' : 'BUY'}</strong> {formatCurrency(Math.abs(driftValue))} of <strong>{alloc.type}</strong>
+                    <strong>{drift > 0 ? t('rebalance.sell') : t('rebalance.buy')}</strong> {formatCurrency(Math.abs(driftValue))} of <strong>{t(`accounts.types.${alloc.type}`)}</strong>
                   </div>
                 );
               })}
