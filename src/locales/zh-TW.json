@@ -1,0 +1,49 @@
+{
+  "nav": {
+    "overview": "概覽",
+    "resilience": "抗壓能力",
+    "accounts": "帳戶管理",
+    "transactions": "交易紀錄",
+    "rebalance": "資產再平衡",
+    "tax": "稅務策略",
+    "subscriptions": "訂閱審核",
+    "csv": "CSV 匯入",
+    "settings": "設定"
+  },
+  "dashboard": {
+    "title": "財務概覽",
+    "subtitle": "您的財務自由之路已規劃完成。",
+    "totalAssets": "總資產",
+    "historicalResilience": "歷史抗壓性",
+    "monthlyFuel": "每月所需投入",
+    "confirmedLeak": "已確認支出",
+    "recentTransactions": "最近交易",
+    "accountBalances": "帳戶餘額",
+    "wealthProjection": "財富預測",
+    "viewAll": "查看全部",
+    "manage": "管理",
+    "today": "今天",
+    "goal": "目標",
+    "resilienceHint": "對抗市場週期的成功率",
+    "fuelHint": "基於即時帳戶餘額",
+    "leakHint": "每月重複性支出",
+    "ahead": "領先",
+    "lagging": "落後",
+    "onTrack": "符合預期"
+  },
+  "monteCarlo": {
+    "title": "歷史抗壓測試",
+    "subtitle": "測試您的計劃在 1926 年以來的每個市場週期中的表現。",
+    "scoreLabel": "抗壓得分",
+    "distribution": "結果分佈",
+    "stressGap": "抗壓缺口",
+    "worstStarts": "最糟的開始日期",
+    "bestStarts": "最佳的開始日期"
+  },
+  "settings": {
+    "title": "設定",
+    "language": "語言",
+    "en": "English",
+    "zhTW": "繁體中文 (Traditional Chinese)"
+  }
+}

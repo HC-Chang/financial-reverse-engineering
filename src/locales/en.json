@@ -1,0 +1,49 @@
+{
+  "nav": {
+    "overview": "Overview",
+    "resilience": "Resilience",
+    "accounts": "Accounts",
+    "transactions": "Transactions",
+    "rebalance": "Rebalance",
+    "tax": "Tax Strategy",
+    "subscriptions": "Subscriptions",
+    "csv": "CSV Import",
+    "settings": "Settings"
+  },
+  "dashboard": {
+    "title": "Financial Overview",
+    "subtitle": "Your path to freedom is mapped out.",
+    "totalAssets": "Total Assets",
+    "historicalResilience": "Historical Resilience",
+    "monthlyFuel": "Monthly Fuel Required",
+    "confirmedLeak": "Confirmed Leak",
+    "recentTransactions": "Recent Transactions",
+    "accountBalances": "Account Balances",
+    "wealthProjection": "Wealth Projection",
+    "viewAll": "View All",
+    "manage": "Manage",
+    "today": "Today",
+    "goal": "Goal",
+    "resilienceHint": "Success rate vs. market cycles",
+    "fuelHint": "Based on live balances",
+    "leakHint": "Monthly recurring expenses",
+    "ahead": "Ahead",
+    "lagging": "Lagging",
+    "onTrack": "On Track"
+  },
+  "monteCarlo": {
+    "title": "Historical Resilience",
+    "subtitle": "Testing your plan against every market cycle since 1926.",
+    "scoreLabel": "Resilience Score",
+    "distribution": "Outcome Distribution",
+    "stressGap": "The Stress Gap",
+    "worstStarts": "Unluckiest Start Dates",
+    "bestStarts": "Luckiest Start Dates"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "en": "English",
+    "zhTW": "Traditional Chinese (繁體中文)"
+  }
+}

@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSettings } from '../../context/SettingsContext';
 import { db } from '../../db/database';
 import './SettingsView.css';
 
 const SettingsView: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const { settings, updateSettings } = useSettings();
+  const [saveStatus, setSaveStatus] = useState('');
   
   const [formData, setFormData] = useState({
     targetMonthlyIncome: settings?.targetMonthlyIncome.toString() || '',
@@ -14,12 +17,8 @@ const SettingsView: React.FC = () => {
     targetDate: settings?.targetDate ? new Date(settings.targetDate).toISOString().split('T')[0] : '',
   });
 
-  const [saveStatus, setSaveStatus] = useState('');
-
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSaveStatus('Saving...');
-    
     await updateSettings({
       targetMonthlyIncome: parseFloat(formData.targetMonthlyIncome),
       initialAssets: parseFloat(formData.initialAssets),
@@ -27,114 +26,126 @@ const SettingsView: React.FC = () => {
       withdrawalRate: parseFloat(formData.withdrawalRate),
       targetDate: new Date(formData.targetDate).toISOString(),
     });
-
-    setSaveStatus('Settings updated successfully!');
+    setSaveStatus('Settings saved successfully!');
     setTimeout(() => setSaveStatus(''), 3000);
   };
 
-  const handleExportData = async () => {
-    const allAccounts = await db.accounts.toArray();
-    const allTransactions = await db.transactions.toArray();
+  const handleExport = async () => {
     const data = {
-      settings,
-      accounts: allAccounts,
-      transactions: allTransactions,
-      exportDate: new Date().toISOString(),
+      settings: await db.settings.get(1),
+      accounts: await db.accounts.toArray(),
+      transactions: await db.transactions.toArray(),
+      subscriptions: await db.subscriptions.toArray(),
     };
-
+    
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = `financial-engine-backup-${new Date().toISOString().split('T')[0]}.json`;
     a.click();
-    URL.revokeObjectURL(url);
   };
 
   const handleClearData = async () => {
-    if (window.confirm('CRITICAL: This will delete ALL local data (accounts, transactions, settings) and reset the app. This cannot be undone. Proceed?')) {
-      await db.delete();
+    if (window.confirm('Are you sure? This will delete all your local data.')) {
+      await db.transactions.clear();
+      await db.accounts.clear();
+      await db.subscriptions.clear();
+      await db.settings.delete(1);
       window.location.reload();
     }
+  };
+
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
   };
 
   return (
     <div className="settings-container">
       <header className="settings-header">
-        <h1>Engine Settings</h1>
-        <p>Fine-tune your financial parameters and manage your local data.</p>
+        <h1>{t('settings.title')}</h1>
+        <p>Configure your engine parameters and data privacy.</p>
       </header>
 
       <div className="settings-grid">
-        <section className="params-section card">
-          <h3>Core Parameters</h3>
+        <section className="settings-form-section card">
+          <h3>Engine Configuration</h3>
           <form onSubmit={handleSave} className="settings-form">
             <div className="form-group">
-              <label>Target Monthly Income ($)</label>
-              <p className="form-help">Monthly spending in today's dollars.</p>
+              <label>Target Monthly Income</label>
               <input 
                 type="number" 
-                value={formData.targetMonthlyIncome} 
-                onChange={(e) => setFormData({...formData, targetMonthlyIncome: e.target.value})} 
+                value={formData.targetMonthlyIncome}
+                onChange={(e) => setFormData({...formData, targetMonthlyIncome: e.target.value})}
               />
             </div>
             <div className="form-group">
-              <label>Initial Investable Assets ($)</label>
-              <p className="form-help">Current value of all stocks, bonds, and cash.</p>
+              <label>Target Freedom Date</label>
               <input 
-                type="number" 
-                value={formData.initialAssets} 
-                onChange={(e) => setFormData({...formData, initialAssets: e.target.value})} 
+                type="date" 
+                value={formData.targetDate}
+                onChange={(e) => setFormData({...formData, targetDate: e.target.value})}
               />
             </div>
             <div className="form-row">
               <div className="form-group">
                 <label>Annual Return (%)</label>
-                <p className="form-help">Inflation-adjusted growth.</p>
                 <input 
                   type="number" 
                   step="0.1"
-                  value={formData.annualReturn} 
-                  onChange={(e) => setFormData({...formData, annualReturn: e.target.value})} 
+                  value={formData.annualReturn}
+                  onChange={(e) => setFormData({...formData, annualReturn: e.target.value})}
                 />
               </div>
               <div className="form-group">
                 <label>Withdrawal Rate (%)</label>
-                <p className="form-help">Annual spend rate (e.g. 4%).</p>
                 <input 
                   type="number" 
                   step="0.1"
-                  value={formData.withdrawalRate} 
-                  onChange={(e) => setFormData({...formData, withdrawalRate: e.target.value})} 
+                  value={formData.withdrawalRate}
+                  onChange={(e) => setFormData({...formData, withdrawalRate: e.target.value})}
                 />
               </div>
             </div>
-            <div className="form-group">
-              <label>Target Date</label>
-              <p className="form-help">When do you want to be financially free?</p>
-              <input 
-                type="date" 
-                value={formData.targetDate} 
-                onChange={(e) => setFormData({...formData, targetDate: e.target.value})} 
-              />
-            </div>
-            <button type="submit" className="save-button">Update Engine Parameters</button>
+            <button type="submit" className="save-button">Save Changes</button>
             {saveStatus && <p className="status-msg success">{saveStatus}</p>}
           </form>
         </section>
 
-        <section className="data-management card">
-          <h3>Data Management</h3>
-          <div className="management-actions">
-            <div className="action-item">
-              <p>Download a local JSON backup of all your accounts and transactions.</p>
-              <button onClick={handleExportData} className="secondary-button">Export Data (JSON)</button>
+        <section className="management-section">
+          <div className="card" style={{ marginBottom: '2rem' }}>
+            <h3>{t('settings.language')}</h3>
+            <div className="language-toggle">
+              <button 
+                className={`secondary-button ${i18n.language === 'en' ? 'active' : ''}`}
+                onClick={() => changeLanguage('en')}
+                style={{ marginRight: '10px', backgroundColor: i18n.language === 'en' ? '#1abc9c' : '#34495e' }}
+              >
+                {t('settings.en')}
+              </button>
+              <button 
+                className={`secondary-button ${i18n.language === 'zh-TW' ? 'active' : ''}`}
+                onClick={() => changeLanguage('zh-TW')}
+                style={{ backgroundColor: i18n.language === 'zh-TW' ? '#1abc9c' : '#34495e' }}
+              >
+                {t('settings.zhTW')}
+              </button>
             </div>
-            
-            <div className="danger-zone">
-              <h4>Danger Zone</h4>
-              <p>Permanently delete all local data and reset the engine to factory defaults.</p>
-              <button onClick={handleClearData} className="danger-button">Clear All Data</button>
+          </div>
+
+          <div className="card">
+            <h3>Data Management</h3>
+            <div className="management-actions">
+              <div className="action-item">
+                <p>Download a local backup of all your data as a JSON file.</p>
+                <button onClick={handleExport} className="secondary-button">Export Backup</button>
+              </div>
+              
+              <div className="danger-zone">
+                <h4>Danger Zone</h4>
+                <p>This will permanently erase all data stored in this browser.</p>
+                <button onClick={handleClearData} className="danger-button">Clear All Data</button>
+              </div>
             </div>
           </div>
         </section>

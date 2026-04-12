@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { SettingsProvider, useSettings } from './context/SettingsContext';
 import OnboardingView from './components/Onboarding/OnboardingView';
 import DashboardView from './components/Dashboard/DashboardView';
@@ -12,6 +13,7 @@ import MonteCarloView from './components/MonteCarlo/MonteCarloView';
 import TransactionsView from './components/Transactions/TransactionsView';
 
 const AppContent: React.FC = () => {
+  const { t } = useTranslation();
   const { settings, isLoading } = useSettings();
   const [activeTab, setActiveTab] = useState<'overview' | 'accounts' | 'csv' | 'rebalance' | 'subscriptions' | 'tax' | 'settings' | 'resilience' | 'transactions'>('overview');
 
@@ -52,31 +54,31 @@ const AppContent: React.FC = () => {
         <nav className="sidebar-nav">
           <ul>
             <li className={activeTab === 'overview' ? 'active' : ''}>
-              <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('overview'); }}>Overview</a>
+              <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('overview'); }}>{t('nav.overview')}</a>
             </li>
             <li className={activeTab === 'resilience' ? 'active' : ''}>
-              <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('resilience'); }}>Resilience</a>
+              <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('resilience'); }}>{t('nav.resilience')}</a>
             </li>
             <li className={activeTab === 'accounts' ? 'active' : ''}>
-              <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('accounts'); }}>Accounts</a>
+              <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('accounts'); }}>{t('nav.accounts')}</a>
             </li>
             <li className={activeTab === 'transactions' ? 'active' : ''}>
-              <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('transactions'); }}>Transactions</a>
+              <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('transactions'); }}>{t('nav.transactions')}</a>
             </li>
             <li className={activeTab === 'rebalance' ? 'active' : ''}>
-              <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('rebalance'); }}>Rebalance</a>
+              <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('rebalance'); }}>{t('nav.rebalance')}</a>
             </li>
             <li className={activeTab === 'tax' ? 'active' : ''}>
-              <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('tax'); }}>Tax Strategy</a>
+              <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('tax'); }}>{t('nav.tax')}</a>
             </li>
             <li className={activeTab === 'subscriptions' ? 'active' : ''}>
-              <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('subscriptions'); }}>Subscriptions</a>
+              <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('subscriptions'); }}>{t('nav.subscriptions')}</a>
             </li>
             <li className={activeTab === 'csv' ? 'active' : ''}>
-              <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('csv'); }}>CSV Import</a>
+              <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('csv'); }}>{t('nav.csv')}</a>
             </li>
             <li className={activeTab === 'settings' ? 'active' : ''}>
-              <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('settings'); }}>Settings</a>
+              <a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('settings'); }}>{t('nav.settings')}</a>
             </li>
           </ul>
         </nav>

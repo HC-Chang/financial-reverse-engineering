@@ -49,6 +49,7 @@ body {
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
+  scrollbar-gutter: stable;
 }
 
 @media (prefers-color-scheme: light) {

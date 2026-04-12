@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
+import { useTranslation } from 'react-i18next';
 import { db } from '../../db/database';
 import { useSettings } from '../../context/SettingsContext';
 import { runMonteCarlo, calculateStressGap, calculateStressDelay, runHistoricalScenario } from '../../logic/monteCarloEngine';
@@ -25,6 +26,7 @@ const HISTORICAL_CONTEXT: Record<string, string> = {
 };
 
 const MonteCarloView: React.FC = () => {
+  const { t } = useTranslation();
   const { settings } = useSettings();
   const accounts = useLiveQuery(() => db.accounts.toArray(), []);
   const [selectedEra, setSelectedEra] = useState<string | null>(null);
@@ -70,21 +72,21 @@ const MonteCarloView: React.FC = () => {
   return (
     <div className="monte-carlo-container">
       <header className="mc-header">
-        <h1>Historical Resilience</h1>
-        <p>Testing your plan against every market cycle since 1926.</p>
+        <h1>{t('monteCarlo.title')}</h1>
+        <p>{t('monteCarlo.subtitle')}</p>
       </header>
 
       <div className="mc-grid">
         <section className="score-card card">
           <div className="gauge-container">
             <div className="gauge-value">{results.resilienceScore.toFixed(1)}%</div>
-            <div className="gauge-label">Resilience Score</div>
+            <div className="gauge-label">{t('monteCarlo.scoreLabel')}</div>
           </div>
           <p>Your plan survived {results.successCount} out of {results.totalSimulations} historical starts.</p>
         </section>
 
         <section className="resilience-range-card card">
-          <h3>Outcome Distribution</h3>
+          <h3>{t('monteCarlo.distribution')}</h3>
           <p>Final balances adjusted for historical inflation.</p>
           <div className="range-visual">
             <div className="range-bar-container">
@@ -123,7 +125,7 @@ const MonteCarloView: React.FC = () => {
         )}
 
         <section className="stress-gap-card card highlight">
-          <h3>The Stress Gap</h3>
+          <h3>{t('monteCarlo.stressGap')}</h3>
           {stressGap > 0 ? (
             <>
               <p>To reach <strong>100% historical resilience</strong> (surviving 1929), choose one:</p>
@@ -151,7 +153,7 @@ const MonteCarloView: React.FC = () => {
         <section className="era-comparison card full-width">
           <div className="era-split">
             <div className="era-column">
-              <h4>Unluckiest Start Dates</h4>
+              <h4>{t('monteCarlo.worstStarts')}</h4>
               <div className="failure-list">
                 {results.worstCases.length > 0 ? (
                   results.worstCases.map(wc => {
@@ -179,7 +181,7 @@ const MonteCarloView: React.FC = () => {
               </div>
             </div>
             <div className="era-column">
-              <h4>Luckiest Start Dates</h4>
+              <h4>{t('monteCarlo.bestStarts')}</h4>
               <div className="success-list">
                 {results.bestCases.map(bc => {
                   const outperformance = (bc.finalBalance / targetNetWorth - 1) * 100;

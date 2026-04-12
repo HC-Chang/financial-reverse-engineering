@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
+import { useTranslation } from 'react-i18next';
 import { db } from '../../db/database';
 import { useSettings } from '../../context/SettingsContext';
 import { calculateRequiredFuel } from '../../logic/engine';
 import { runMonteCarlo } from '../../logic/monteCarloEngine';
 import { formatCurrency, formatPercent } from '../../utils/formatters';
 import AreaChart from '../Common/AreaChart';
-import { Subscription } from '../../types/financial';
 import './DashboardView.css';
 
 interface DashboardViewProps {
@@ -14,6 +14,7 @@ interface DashboardViewProps {
 }
 
 const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
+  const { t } = useTranslation();
   const { settings } = useSettings();
   const accounts = useLiveQuery(() => db.accounts.toArray(), []);
   const transactions = useLiveQuery(() => db.transactions.orderBy('date').reverse().limit(5).toArray(), []);
@@ -60,14 +61,14 @@ const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
     return <div>Loading...</div>;
   }
 
-  const { monthlyFuel, netWorthGoal, daysToFreedom } = results;
+  const { monthlyFuel, netWorthGoal } = results;
   const { resilienceScore } = mcResults;
 
   return (
     <main className="dashboard-content">
       <header className="dashboard-header">
-        <h1>Financial Overview</h1>
-        <p>Your path to freedom is mapped out.</p>
+        <h1>{t('dashboard.title')}</h1>
+        <p>{t('dashboard.subtitle')}</p>
       </header>
 
       {pendingSubsCount > 0 && (
@@ -83,15 +84,15 @@ const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
 
       <section className="stat-cards">
         <div className="stat-card">
-          <span className="stat-label">Total Assets</span>
+          <span className="stat-label">{t('dashboard.totalAssets')}</span>
           <span className="stat-value">{formatCurrency(totalBalance)}</span>
-          <span className="stat-hint">Sum of all tracked accounts</span>
+          <span className="stat-hint">{t('dashboard.resilienceHint')}</span>
         </div>
 
         <div className="stat-card highlight">
-          <span className="stat-label">Historical Resilience</span>
+          <span className="stat-label">{t('dashboard.historicalResilience')}</span>
           <span className="stat-value">{resilienceScore.toFixed(1)}%</span>
-          <span className="stat-hint">Success rate vs. every market cycle</span>
+          <span className="stat-hint">{t('dashboard.resilienceHint')}</span>
           <button 
             className="action-link" 
             onClick={() => onNavigate('resilience')}
@@ -101,38 +102,38 @@ const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
         </div>
 
         <div className="stat-card highlight">
-          <span className="stat-label">Monthly Fuel Required</span>
+          <span className="stat-label">{t('dashboard.monthlyFuel')}</span>
           <span className="stat-value">{formatCurrency(monthlyFuel)}</span>
           <div className="drift-indicator">
             {monthlyFuel < originalFuel ? (
               <span className="drift-tag ahead">
-                ▼ {formatCurrency(originalFuel - monthlyFuel)} Ahead
+                ▼ {formatCurrency(originalFuel - monthlyFuel)} {t('dashboard.ahead')}
               </span>
             ) : monthlyFuel > originalFuel ? (
               <span className="drift-tag lagging">
-                ▲ {formatCurrency(monthlyFuel - originalFuel)} Lagging
+                ▲ {formatCurrency(monthlyFuel - originalFuel)} {t('dashboard.lagging')}
               </span>
             ) : (
-              <span className="drift-tag on-track">On Track</span>
+              <span className="drift-tag on-track">{t('dashboard.onTrack')}</span>
             )}
           </div>
-          <span className="stat-hint">Based on live account balances</span>
+          <span className="stat-hint">{t('dashboard.fuelHint')}</span>
         </div>
 
         <div className="stat-card">
-          <span className="stat-label">Confirmed Leak</span>
+          <span className="stat-label">{t('dashboard.confirmedLeak')}</span>
           <span className="stat-value" style={{ color: totalMonthlyLeak > 0 ? '#e74c3c' : 'inherit' }}>
             {formatCurrency(totalMonthlyLeak)}
           </span>
-          <span className="stat-hint">Total monthly recurring expenses</span>
+          <span className="stat-hint">{t('dashboard.leakHint')}</span>
         </div>
       </section>
 
       <div className="dashboard-main-grid">
         <section className="dashboard-column card">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-            <h3 style={{ margin: 0 }}>Recent Transactions</h3>
-            <button className="action-link" onClick={() => onNavigate('transactions')}>View All</button>
+            <h3 style={{ margin: 0 }}>{t('dashboard.recentTransactions')}</h3>
+            <button className="action-link" onClick={() => onNavigate('transactions')}>{t('dashboard.viewAll')}</button>
           </div>
           {transactions && transactions.length > 0 ? (
             <div className="mini-transactions">
@@ -155,8 +156,8 @@ const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
 
         <section className="dashboard-column card">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-            <h3 style={{ margin: 0 }}>Account Balances</h3>
-            <button className="action-link" onClick={() => onNavigate('accounts')}>Manage</button>
+            <h3 style={{ margin: 0 }}>{t('dashboard.accountBalances')}</h3>
+            <button className="action-link" onClick={() => onNavigate('accounts')}>{t('dashboard.manage')}</button>
           </div>
           {accounts && accounts.length > 0 ? (
             <div className="mini-accounts">
@@ -174,13 +175,13 @@ const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
       </div>
 
       <section className="dashboard-charts card" style={{ marginTop: '1.5rem' }}>
-        <h3>Wealth Projection</h3>
+        <h3>{t('dashboard.wealthProjection')}</h3>
         <div style={{ height: '250px', marginTop: '1rem' }}>
           <AreaChart data={chartData} height={250} />
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem', color: '#7f8c8d', fontSize: '0.8rem' }}>
-          <span>Today</span>
-          <span>Goal ({formatCurrency(netWorthGoal)})</span>
+          <span>{t('dashboard.today')}</span>
+          <span>{t('dashboard.goal')} ({formatCurrency(netWorthGoal)})</span>
         </div>
       </section>
     </main>
